@@ -1,0 +1,41 @@
+{
+  "name": "pickle-pod",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interactive podcast experience.",
+  "contributors": [
+    "Travis Fischer <travis@transitivebullsh.it>",
+    "Sasha Sheng <hackgoofer@gmail.com>"
+  ],
+  "repository": "transitive-bullshit/pickle-pod",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "pre-commit": "lint-staged",
+    "test": "run-p test:*",
+    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ky": "^0.33.3",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/node": "20.4.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.0",
+    "tsx": "^3.12.7",
+    "typescript": "5.1.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ]
+  }
+}
