@@ -2,7 +2,7 @@
   "name": "pickle-pod",
   "version": "0.1.0",
   "private": true,
-  "description": "Interactive podcast experience.",
+  "description": "Interactive podcast experience featuring Lex Fridman, ElevenLabs, and Dexa AI.",
   "contributors": [
     "Travis Fischer <travis@transitivebullsh.it>",
     "Sasha Sheng <hackgoofer@gmail.com>"
