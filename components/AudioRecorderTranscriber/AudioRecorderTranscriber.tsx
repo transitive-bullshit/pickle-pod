@@ -21,9 +21,7 @@ export const AudioRecorderTranscriber = ({
     console.log('start recording')
 
     const token = await fetchAssemblyAIRealtimeToken()
-
-    console.log('captured token: ' + token)
-    setIsRecording(true) // set isRecording to true when recording starts
+    setIsRecording(true)
 
     socket = new WebSocket(
       `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`

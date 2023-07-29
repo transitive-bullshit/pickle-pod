@@ -6,6 +6,8 @@ import YouTube, { YouTubeEvent } from 'react-youtube'
 import { format } from 'date-fns'
 import { Button } from '@/components/Button/Button'
 import { Drawer } from 'vaul'
+import { fetchAssemblyAIRealtimeToken } from '@/lib/api'
+import type RecordRTCType from 'recordrtc'
 
 // import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
@@ -14,12 +16,17 @@ import { Play, Pause, HelpCircle } from '@/icons'
 import * as types from '@/lib/types'
 
 import styles from './styles.module.css'
-import { AudioRecorderTranscriber } from '@/components/AudioRecorderTranscriber/AudioRecorderTranscriber'
+
+let recorder: any
+let recordedChunks: any = []
+let socket: any
 
 export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [playerStatus, setPlayerStatus] = React.useState<number>(-1)
   const [isMounted, setIsMounted] = React.useState(false)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [transcription, setTranscription] = React.useState('')
+  const [isRecording, setIsRecording] = React.useState(false)
   const videoPlayer = React.useRef<any>(null)
 
   React.useEffect(() => {
@@ -49,12 +56,118 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     }
   }, [])
 
-  const onClickAskQuestion = React.useCallback(() => {
+  const stopRecording = React.useCallback(() => {
+    if (!socket || !recorder) return
+
+    recorder.stopRecording(() => {
+      setIsRecording(false)
+
+      socket.send(JSON.stringify({ terminate_session: true }))
+      socket.close()
+      socket = null
+
+      recorder.destroy()
+      recorder = null
+    })
+
+    console.log(recordedChunks)
+  }, [])
+
+  const onClickAskQuestion = React.useCallback(async () => {
     if (!videoPlayer.current) return
 
     videoPlayer.current.pauseVideo()
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    })
+    const RecordRTC = (await import('recordrtc'))
+      .default as typeof RecordRTCType
+
+    const token = await fetchAssemblyAIRealtimeToken()
+
+    socket = new WebSocket(
+      `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
+    )
+    const texts = {}
+
+    socket.onmessage = (message: any) => {
+      let msg = ''
+      const res = JSON.parse(message.data)
+      const msgType = res.message_type
+      if (msgType === 'FinalTranscript') {
+        stopRecording()
+      }
+
+      console.log('res: ' + JSON.stringify(res))
+
+      texts[res.audio_start] = res.text
+      const keys = Object.keys(texts)
+      keys.sort((a, b) => a.localeCompare(b))
+
+      for (const key of keys) {
+        if (texts[key]) {
+          if (msg.split(' ').length > 6) {
+            msg = ''
+          }
+          msg += ` ${texts[key]}`
+        }
+      }
+
+      setTranscription(msg)
+      console.log('message', msg)
+    }
+
+    socket.onerror = (event: any) => {
+      console.error(event)
+      socket.close()
+    }
+
+    socket.onclose = (event: any) => {
+      console.log(event)
+      socket = null
+    }
+
+    socket.onopen = async () => {
+      recorder = new RecordRTC(stream, {
+        type: 'audio',
+        mimeType: 'audio/webm;codecs=pcm',
+        recorderType: RecordRTC.StereoAudioRecorder,
+        timeSlice: 250,
+        desiredSampRate: 16000,
+        numberOfAudioChannels: 1,
+        bufferSize: 4096,
+        audioBitsPerSecond: 128000,
+        ondataavailable: function (blob) {
+          const reader = new FileReader()
+          reader.onload = () => {
+            const base64data = reader.result as string
+
+            if (socket) {
+              socket.send(
+                JSON.stringify({
+                  audio_data: base64data.split('base64,')[1]
+                })
+              )
+            }
+          }
+
+          reader.readAsDataURL(blob)
+        }
+      })
+
+      recorder.startRecording()
+    }
+
     setIsDialogOpen(true)
-  }, [])
+  }, [stopRecording])
+
+  React.useEffect(() => {
+    if (!isDialogOpen) {
+      // clean up dialog state
+    }
+  }, [isDialogOpen])
 
   return (
     <Layout>
@@ -109,8 +222,6 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                 <HelpCircle className={styles.actionIcon} />
               </Button>
             </div>
-
-            {/* <AudioRecorderTranscriber /> */}
           </div>
         </div>
       </div>
@@ -134,7 +245,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                 <div className='mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8' />
                 <div className='max-w-md mx-auto'>
                   <Drawer.Title className='font-medium mb-4'>
-                    Unstyled drawer for React.
+                    Speak your question.
                   </Drawer.Title>
 
                   <p className='text-zinc-600 mb-2'>

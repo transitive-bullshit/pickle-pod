@@ -1,6 +1,5 @@
 import { format, parseISO } from 'date-fns'
 import defaultKy from 'ky'
-import type { NextApiRequest, NextApiResponse } from 'next'
 
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3/videos?'
 
@@ -113,7 +112,7 @@ export class YoutubeClient {
       .get(``, {
         searchParams: {
           id: videoId,
-          key: process.env.GOOGLE_API_KEY,
+          key: process.env.GOOGLE_API_KEY!,
           part: 'snippet,contentDetails'
         }
       })

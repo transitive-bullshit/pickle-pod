@@ -3,7 +3,7 @@ import { Head, Html, Main, NextScript } from 'next/document'
 
 export default function Document() {
   return (
-    <Html lang='en' dir='ltr' className='dark'>
+    <Html lang='en' dir='ltr'>
       <Head>
         <link rel='shortcut icon' href='/favicon.ico' />
 
