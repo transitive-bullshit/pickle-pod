@@ -5,6 +5,11 @@ export default async function getAssemblyAIRealtimeToken(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'GET') {
+    res.status(405).json({ error: 'method not allowed' })
+    return
+  }
+
   try {
     const token = await ky
       .post('https://api.assemblyai.com/v2/realtime/token', {
