@@ -5,11 +5,12 @@ import Image from 'next/image'
 import YouTube, { YouTubeEvent } from 'react-youtube'
 import { format } from 'date-fns'
 import { Button } from '@/components/Button/Button'
+import { Drawer } from 'vaul'
 
 // import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
-import { Play, Pause } from '@/icons'
+import { Play, Pause, HelpCircle } from '@/icons'
 import * as types from '@/lib/types'
 
 import styles from './styles.module.css'
@@ -17,7 +18,14 @@ import { AudioRecorderTranscriber } from '@/components/AudioRecorderTranscriber/
 
 export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [playerStatus, setPlayerStatus] = React.useState<number>(-1)
+  const [isMounted, setIsMounted] = React.useState(false)
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const videoPlayer = React.useRef<any>(null)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const onPlayerReady = React.useCallback((event: YouTubeEvent) => {
     videoPlayer.current = event.target
   }, [])
@@ -41,6 +49,13 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     }
   }, [])
 
+  const onClickAskQuestion = React.useCallback(() => {
+    if (!videoPlayer.current) return
+
+    videoPlayer.current.pauseVideo()
+    setIsDialogOpen(true)
+  }, [])
+
   return (
     <Layout>
       <PageHead />
@@ -56,10 +71,6 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               alt='Youtube Thumbnail'
             />
 
-            <div className={styles.date}>{podcast.publishedAtFormatted}</div>
-
-            <h1 className={cs(styles.title)}>{podcast.title}</h1>
-
             <YouTube
               className={styles.video}
               videoId={podcast.youtubeId}
@@ -74,22 +85,76 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               }}
             />
 
-            <Button
-              className={styles.playPause}
-              onClick={onClickPlayPause}
-              isLoading={playerStatus < 0}
-            >
-              {playerStatus !== 1 ? (
-                <Play className={styles.playPauseIcon} />
-              ) : (
-                <Pause className={styles.playPauseIcon} />
-              )}
-            </Button>
+            <div className={styles.date}>{podcast.publishedAtFormatted}</div>
+
+            <h1 className={cs(styles.title)}>{podcast.title}</h1>
+
+            <div className={styles.actions}>
+              <Button
+                className={styles.actionButton}
+                onClick={onClickPlayPause}
+                isLoading={playerStatus < 0}
+              >
+                {playerStatus !== 1 ? (
+                  <Play className={styles.actionIcon} />
+                ) : (
+                  <Pause className={styles.actionIcon} />
+                )}
+              </Button>
+
+              <Button
+                className={styles.actionButton}
+                onClick={onClickAskQuestion}
+              >
+                <HelpCircle className={styles.actionIcon} />
+              </Button>
+            </div>
 
             {/* <AudioRecorderTranscriber /> */}
           </div>
         </div>
       </div>
+
+      {isMounted && (
+        <Drawer.Root
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          dismissible
+        >
+          <Drawer.Overlay className='fixed inset-0 bg-black/40' />
+
+          <Drawer.Portal>
+            <Drawer.Content
+              className='bg-zinc-100 flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0'
+              onEscapeKeyDown={() => setIsDialogOpen(false)}
+              onInteractOutside={() => setIsDialogOpen(false)}
+              onPointerDownOutside={() => setIsDialogOpen(false)}
+            >
+              <div className='p-4 bg-white rounded-t-[10px] flex-1'>
+                <div className='mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8' />
+                <div className='max-w-md mx-auto'>
+                  <Drawer.Title className='font-medium mb-4'>
+                    Unstyled drawer for React.
+                  </Drawer.Title>
+
+                  <p className='text-zinc-600 mb-2'>
+                    This component can be used as a replacement for a Dialog on
+                    mobile and tablet devices.
+                  </p>
+
+                  <button
+                    type='button'
+                    onClick={() => setIsDialogOpen(false)}
+                    className='rounded-md mb-6 w-full bg-gray-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600'
+                  >
+                    Click to close
+                  </button>
+                </div>
+              </div>
+            </Drawer.Content>
+          </Drawer.Portal>
+        </Drawer.Root>
+      )}
     </Layout>
   )
 }

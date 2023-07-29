@@ -28,12 +28,12 @@
   min-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--gap);
 }
 
 .thumbnail {
   width: 100%;
+  height: auto;
   aspect-ratio: 1280 / 720;
   object-fit: contain;
 }
@@ -45,6 +45,7 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   line-clamp: 1;
+  font-size: 1.2em;
 }
 
 .video {
@@ -52,11 +53,18 @@
   height: 0;
 }
 
-.playPause {
+.actionButton {
   display: inline-flex;
 }
 
-.playPauseIcon {
+.actionIcon {
   width: 24px;
   height: 24px;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
