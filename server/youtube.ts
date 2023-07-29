@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns'
 import defaultKy from 'ky'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -8,14 +9,15 @@ interface YoutubeMetadataResponse {
   etag: string
   items: Item[]
   pageInfo: PageInfo
-  snippet: YoutubeSnippet
-  contentDetails: ContentDetails
 }
 
 interface Item {
   kind: string
   etag: string
   id: string
+
+  snippet: YoutubeSnippet
+  contentDetails: ContentDetails
 }
 
 interface PageInfo {
@@ -68,6 +70,20 @@ interface ContentDetails {
 
 interface ContentRating {}
 
+const convertYouTubeDuration = function (duration = this) {
+  const time_extractor = /([0-9]*H)?([0-9]*M)?([0-9]*S)?$/
+  const extracted = time_extractor.exec(duration)
+  const hours = parseInt(extracted[1], 10) || 0
+  const minutes = parseInt(extracted[2], 10) || 0
+  const seconds = parseInt(extracted[3], 10) || 0
+  const ms = hours * 3600 * 1000 + minutes * 60 * 1000 + seconds * 1000
+  // This solution is limited to range of one day,
+  // which is fine if you use it to format milliseconds up to 24 hours (i.e. ms < 86400000)
+  const ret = new Date(ms).toISOString().slice(11, -1).split('.')[0]
+  console.log(ret)
+  return ret
+}
+
 export class YoutubeClient {
   readonly api: typeof defaultKy
 
@@ -93,7 +109,7 @@ export class YoutubeClient {
   }
 
   async getMetadata(videoId: string) {
-    return this.api
+    const returnJson = await this.api
       .get(``, {
         searchParams: {
           id: videoId,
@@ -102,5 +118,18 @@ export class YoutubeClient {
         }
       })
       .json<YoutubeMetadataResponse>()
+
+    console.log(returnJson)
+
+    returnJson.items.map((item) => {
+      item.contentDetails.duration = convertYouTubeDuration(
+        item.contentDetails.duration
+      )
+
+      const date = parseISO(item.snippet.publishedAt) // parse the string into a Date object
+      item.snippet.publishedAt = format(date, 'MMMM dd, yyyy')
+    })
+
+    return returnJson
   }
 }
