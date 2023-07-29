@@ -13,25 +13,33 @@
     "node": ">=16"
   },
   "scripts": {
-    "prepare": "husky install",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "pre-commit": "lint-staged",
     "test": "run-p test:*",
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
     "ky": "^0.33.3",
-    "prettier": "2",
-    "zod": "^3.21.4"
+    "next": "^13.4.12",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-select": "^5.7.4",
+    "recordrtc": "^5.6.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
-    "@types/node": "20.4.5",
+    "@types/node": "^20.4.5",
+    "@types/react": "^18.2.17",
+    "dotenv": "^16.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "npm-run-all": "^4.1.5",
+    "prettier": "2",
+    "tailwindcss": "^3.3.3",
     "tsx": "^3.12.7",
-    "typescript": "5.1.6"
+    "typescript": "^5.1.6"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
