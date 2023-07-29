@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import fs from 'fs/promises'
 
-import { ElevenLabsClient } from '@/index'
+import { ElevenLabsClient } from '@/lib'
 
 async function main() {
   const voiceId = 'U1iLAvrBdqSzHH89CB7p'

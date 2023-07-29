@@ -1,26 +1,49 @@
 {
+  "name": "pickle-pod",
+  "version": "0.1.0",
   "private": true,
+  "description": "Interactive podcast experience featuring Lex Fridman, ElevenLabs, and Dexa AI.",
+  "contributors": [
+    "Travis Fischer <travis@transitivebullsh.it>",
+    "Sasha Sheng <hackgoofer@gmail.com>"
+  ],
+  "repository": "transitive-bullshit/pickle-pod",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "pre-commit": "lint-staged",
+    "test": "run-p test:*",
+    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
   },
   "dependencies": {
-    "axios": "^1.4.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "ky": "^0.33.3",
     "next": "^13.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-select": "^5.7.4",
-    "recordrtc": "^5.6.2",
-    "serve": "^14.0.1",
-    "tailwindcss": "^3.3.3"
+    "recordrtc": "^5.6.2"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.17",
+    "dotenv": "^16.0.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "2",
+    "tailwindcss": "^3.3.3",
+    "tsx": "^3.12.7",
     "typescript": "^5.1.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ]
   }
 }

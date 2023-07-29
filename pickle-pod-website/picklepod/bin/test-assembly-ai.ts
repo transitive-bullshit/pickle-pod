@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import fs from 'fs/promises'
 
-import { AssemblyAIClient } from '@/index'
+import { AssemblyAIClient } from '@/lib'
 
 async function main() {
   const assembly = new AssemblyAIClient()
