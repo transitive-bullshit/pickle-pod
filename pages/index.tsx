@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { getYoutubeMetadata } from '@/lib/api'
 
 const podcasters = [{ value: 'lex-fridman', label: 'Lex Fridman' }]
 
@@ -14,30 +16,61 @@ const IndexPage = () => {
 
   const handleStart = () => {
     // Handle the start button click here
+    console.log('start')
+  }
+
+  const handleURLOnChange = (e) => {
+    const enteredURL: string = e.target.value
+    setUrl(enteredURL)
+
+    if (isValidYoutubeUrl(enteredURL)) {
+      const videoId = getVideoId(enteredURL)
+
+      console.log(videoId)
+      getMetadata(videoId)
+    }
+  }
+
+  const getMetadata = async (videoId) => {
+    const data = await getYoutubeMetadata(videoId)
+    console.log(data)
+    return data.items[0] // return the first item (should be the only item)
+  }
+
+  const getVideoId = (url) => {
+    const urlObj = new URL(url)
+
+    if (urlObj.hostname === 'www.youtube.com') {
+      videoId = new URLSearchParams(urlObj.search).get('v')
+    } else if (urlObj.hostname === 'youtu.be') {
+      videoId = urlObj.pathname.split('/')[1]
+    }
+
+    return videoId
+  }
+
+  function isValidYoutubeUrl(url) {
+    const regex = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/
+    return regex.test(url)
   }
 
   return (
     <Layout>
       <PageHead />
-
       <h2 className='text-2xl font-bold text-center mt-4'>
         Welcome to Pickle Pod
       </h2>
-      <p className='text-center mt-2 w-full'>
-        Please enter the YouTube URL you want to process
-      </p>
+      <p className='text-center mt-2 w-full'>Please enter the YouTube URL</p>
       <Input
+        type='youtube'
         className='mt-4 w-full p-2 border rounded'
         value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        onChange={handleURLOnChange}
         placeholder='YouTube URL'
       />
-      <button
-        className='mt-4 w-full py-2 bg-blue-500 text-white rounded'
-        onClick={handleStart}
-      >
+      <Button variant='outline' onClick={handleStart}>
         Start
-      </button>
+      </Button>
     </Layout>
   )
 }
