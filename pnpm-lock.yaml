@@ -43,6 +43,9 @@ devDependencies:
   '@types/react':
     specifier: ^18.2.17
     version: 18.2.17
+  '@types/recordrtc':
+    specifier: ^5.6.11
+    version: 5.6.11
   dotenv:
     specifier: ^16.0.3
     version: 16.0.3
@@ -1701,6 +1704,10 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
+
+  /@types/recordrtc@5.6.11:
+    resolution: {integrity: sha512-X4XD5nltz0cjmyzsPNegQReOPF+C5ARTfSPAPhqnKV7SsfRta/M4FBJ5AtSInCaEveL71FLLSVQE9mg8Uuo++w==}
+    dev: true
 
   /@types/scheduler@0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}

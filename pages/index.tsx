@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Select from 'react-select'
 import type RecordRTCType from 'recordrtc'
 
@@ -9,9 +9,11 @@ let recordedChunks = []
 let socket
 
 const IndexPage = () => {
-  const [selectedPodcaster, setSelectedPodcaster] = useState(podcasters[0])
-  const [transcription, setTranscription] = useState('') // new state for storing transcription
-  const [isRecording, setIsRecording] = useState(false) // new state for recording status
+  const [selectedPodcaster, setSelectedPodcaster] = React.useState(
+    podcasters[0]
+  )
+  const [transcription, setTranscription] = React.useState('')
+  const [isRecording, setIsRecording] = React.useState(false)
 
   const handleChange = (selectedOption) => {
     setSelectedPodcaster(selectedOption)
@@ -25,12 +27,12 @@ const IndexPage = () => {
     console.log('captured token: ' + token)
     setIsRecording(true) // set isRecording to true when recording starts
 
-    socket = await new WebSocket(
+    socket = new WebSocket(
       `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
     )
     const texts = {}
 
-    socket.onmessage = (message) => {
+    socket.onmessage = (message: any) => {
       let msg = ''
       const res = JSON.parse(message.data)
       const msgType = res.message_type
@@ -42,7 +44,7 @@ const IndexPage = () => {
 
       texts[res.audio_start] = res.text
       const keys = Object.keys(texts)
-      keys.sort((a, b) => a - b)
+      keys.sort((a, b) => a.localeCompare(b))
 
       for (const key of keys) {
         if (texts[key]) {
@@ -52,32 +54,30 @@ const IndexPage = () => {
           msg += ` ${texts[key]}`
         }
       }
-      // captions.innerText = msg;
+
       setTranscription(msg)
-      console.log('recorded message: ' + msg)
+      console.log('message', msg)
     }
 
-    socket.onerror = (event) => {
+    socket.onerror = (event: any) => {
       console.error(event)
       socket.close()
     }
 
-    socket.onclose = (event) => {
+    socket.onclose = (event: any) => {
       console.log(event)
-      // captions.innerText = ''
       socket = null
     }
 
     socket.onopen = async () => {
-      console.log('onopen')
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false
       })
 
-      console.log(stream)
       const RecordRTC = (await import('recordrtc'))
         .default as typeof RecordRTCType
+
       recorder = new RecordRTC(stream, {
         type: 'audio',
         mimeType: 'audio/webm;codecs=pcm',
@@ -90,7 +90,8 @@ const IndexPage = () => {
         ondataavailable: function (blob) {
           const reader = new FileReader()
           reader.onload = () => {
-            const base64data = reader.result
+            const base64data = reader.result as string
+
             if (socket) {
               socket.send(
                 JSON.stringify({
@@ -99,9 +100,11 @@ const IndexPage = () => {
               )
             }
           }
+
           reader.readAsDataURL(blob)
         }
       })
+
       recorder.startRecording()
     }
   }
@@ -110,7 +113,7 @@ const IndexPage = () => {
     try {
       const url = 'http://localhost:3000/api/token'
 
-      const response = await fetch(url) // get temp session token from server.js (backend)
+      const response = await fetch(url)
       const data = await response.json()
 
       if (data.error) {
@@ -123,7 +126,7 @@ const IndexPage = () => {
       const {
         response: { status, data }
       } = error
-      console.log(status, data)
+      console.error(status, data)
     }
   }
 
@@ -134,7 +137,7 @@ const IndexPage = () => {
 
   // Stops recording and ends real-time session.
   const stopRecordingCallback = () => {
-    setIsRecording(false) // set isRecording to false when recording stops
+    setIsRecording(false)
 
     socket.send(JSON.stringify({ terminate_session: true }))
     socket.close()
@@ -155,6 +158,7 @@ const IndexPage = () => {
             <div className='text-xl font-medium text-gray-700'>
               Select a Podcaster
             </div>
+
             <Select
               instanceId={podcasters[0].value}
               options={podcasters}
@@ -165,6 +169,7 @@ const IndexPage = () => {
             />
           </div>
         </div>
+
         <div className='flex items-center justify-center mt-6'>
           <button
             onClick={startRecording}
@@ -180,9 +185,11 @@ const IndexPage = () => {
             Stop Recording
           </button>
         </div>
+
         <div className='transcription mt-6 text-center'>
           {/* add this div to display the transcription */}
           <h2>Transcription</h2>
+
           <p>{transcription}</p>
         </div>
       </div>
