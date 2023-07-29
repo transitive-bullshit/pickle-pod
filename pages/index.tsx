@@ -1,175 +1,93 @@
-import React from 'react'
-import Select from 'react-select'
-import type RecordRTCType from 'recordrtc'
+import React, { useState } from 'react'
+
+import { Input } from '@/components/ui/input'
 
 const podcasters = [{ value: 'lex-fridman', label: 'Lex Fridman' }]
-
-let recorder
-let recordedChunks = []
-let socket
 
 const IndexPage = () => {
   const [selectedPodcaster, setSelectedPodcaster] = React.useState(
     podcasters[0]
   )
-  const [transcription, setTranscription] = React.useState('')
-  const [isRecording, setIsRecording] = React.useState(false)
+  const [url, setUrl] = useState('')
 
-  const handleChange = (selectedOption) => {
-    setSelectedPodcaster(selectedOption)
-  }
-
-  const startRecording = async () => {
-    console.log('start recording')
-
-    const token = await fetchToken()
-
-    console.log('captured token: ' + token)
-    setIsRecording(true) // set isRecording to true when recording starts
-
-    socket = new WebSocket(
-      `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
-    )
-    const texts = {}
-
-    socket.onmessage = (message: any) => {
-      let msg = ''
-      const res = JSON.parse(message.data)
-      const msgType = res.message_type
-      if (msgType === 'FinalTranscript') {
-        stopRecording()
-      }
-
-      console.log('res: ' + JSON.stringify(res))
-
-      texts[res.audio_start] = res.text
-      const keys = Object.keys(texts)
-      keys.sort((a, b) => a.localeCompare(b))
-
-      for (const key of keys) {
-        if (texts[key]) {
-          if (msg.split(' ').length > 6) {
-            msg = ''
-          }
-          msg += ` ${texts[key]}`
-        }
-      }
-
-      setTranscription(msg)
-      console.log('message', msg)
-    }
-
-    socket.onerror = (event: any) => {
-      console.error(event)
-      socket.close()
-    }
-
-    socket.onclose = (event: any) => {
-      console.log(event)
-      socket = null
-    }
-
-    socket.onopen = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false
-      })
-
-      const RecordRTC = (await import('recordrtc'))
-        .default as typeof RecordRTCType
-
-      recorder = new RecordRTC(stream, {
-        type: 'audio',
-        mimeType: 'audio/webm;codecs=pcm',
-        recorderType: RecordRTC.StereoAudioRecorder,
-        timeSlice: 250,
-        desiredSampRate: 16000,
-        numberOfAudioChannels: 1,
-        bufferSize: 4096,
-        audioBitsPerSecond: 128000,
-        ondataavailable: function (blob) {
-          const reader = new FileReader()
-          reader.onload = () => {
-            const base64data = reader.result as string
-
-            if (socket) {
-              socket.send(
-                JSON.stringify({
-                  audio_data: base64data.split('base64,')[1]
-                })
-              )
-            }
-          }
-
-          reader.readAsDataURL(blob)
-        }
-      })
-
-      recorder.startRecording()
-    }
-  }
-
-  const fetchToken = async () => {
-    try {
-      const url = 'http://localhost:3000/api/token'
-
-      const response = await fetch(url)
-      const data = await response.json()
-
-      if (data.error) {
-        alert(data.error)
-      }
-
-      const { token } = data
-      return token
-    } catch (error) {
-      const {
-        response: { status, data }
-      } = error
-      console.error(status, data)
-    }
-  }
-
-  const stopRecording = () => {
-    recorder.stopRecording(stopRecordingCallback)
-    console.log(recordedChunks)
-  }
-
-  // Stops recording and ends real-time session.
-  const stopRecordingCallback = () => {
-    setIsRecording(false)
-
-    socket.send(JSON.stringify({ terminate_session: true }))
-    socket.close()
-    socket = null
-
-    recorder.destroy()
-    recorder = null
+  const handleStart = () => {
+    // Handle the start button click here
   }
 
   return (
-    <div
-      className='flex flex-col items-center justify-center min-h-screen py-2'
+    <div className='min-h-screen flex items-center justify-center bg-gray-100'>
+      <div className='p-6 bg-white rounded shadow-md w-full max-w-md flex flex-col items-center justify-center'>
+        <img src='./pickle.jpg' alt='Pickle Logo' className='h-16 w-16' />
+        <h2 className='text-2xl font-bold text-center mt-4'>
+          Welcome to Pickle Pod
+        </h2>
+        <p className='text-center mt-2'>
+          Please enter the YouTube URL you want to process
+        </p>
+        <Input
+          className='mt-4 w-full p-2 border rounded'
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder='YouTube URL'
+        />
+        <button
+          className='mt-4 w-full py-2 bg-blue-500 text-white rounded'
+          onClick={handleStart}
+        >
+          Start
+        </button>
+      </div>
+    </div>
+
+    /* 
+          {<div
+      className='flex flex-col items-center justify-center min-h-screen py-2 w-full'
       style={{ backgroundColor: isRecording ? 'green' : 'yellow' }}
     >
-      <div className='flex flex-col w-full p-8 text-gray-800 bg-white shadow-lg rounded-2xl'>
-        <div className='flex items-center justify-center'>
+    <div className='flex flex-col w-full p-8 text-gray-800 bg-white shadow-lg rounded-2xl'>
+        <div className='flex items-center justify-center mt-20'>
           <div className='p-3'>
-            <div className='text-xl font-medium text-gray-700'>
-              Select a Podcaster
+            <div
+              style={{
+                display: 'flex',
+                padding: '0 20px',
+                flexWrap: 'wrap',
+                gap: 15,
+                alignItems: 'center',
+                marginBottom: 20
+              }}
+            >
+              <Label.Root className='LabelRoot' htmlFor='podcaster'>
+                Select a podcaster:
+              </Label.Root>
+              <Select
+                id='podcaster'
+                instanceId={podcasters[0].value}
+                options={podcasters}
+                value={selectedPodcaster}
+                onChange={handleChange}
+                isSearchable={true}
+                placeholder='Select a podcaster...'
+              />
+              <Label.Root className='LabelRoot' htmlFor='firstName'>
+                Enter a URL:
+              </Label.Root>
+              <input
+                className='Input'
+                type='text'
+                id='firstName'
+                defaultValue='Pedro Duarte'
+              />
             </div>
-
-            <Select
-              instanceId={podcasters[0].value}
-              options={podcasters}
-              value={selectedPodcaster}
-              onChange={handleChange}
-              isSearchable={true}
-              placeholder='Select a podcaster...'
-            />
           </div>
         </div>
-
+        <AspectRatio.Root ratio={1 / 1} className='w-24 h-24'>
+          <img
+            className='object-cover w-full h-full'
+            src={imageSrc}
+            alt='Landscape photograph by Tobias Tullius'
+          />
+        </AspectRatio.Root>
         <div className='flex items-center justify-center mt-6'>
           <button
             onClick={startRecording}
@@ -187,13 +105,11 @@ const IndexPage = () => {
         </div>
 
         <div className='transcription mt-6 text-center'>
-          {/* add this div to display the transcription */}
           <h2>Transcription</h2>
-
           <p>{transcription}</p>
         </div>
-      </div>
-    </div>
+      </div> 
+        </div>}*/
   )
 }
 
