@@ -34,12 +34,12 @@ const IndexPage = () => {
   const getMetadata = async (videoId) => {
     const data = await getYoutubeMetadata(videoId)
     console.log(data)
-    return data.items[0] // return the first item (should be the only item)
+    return data // return the first item (should be the only item)
   }
 
   const getVideoId = (url) => {
     const urlObj = new URL(url)
-
+    var videoId
     if (urlObj.hostname === 'www.youtube.com') {
       videoId = new URLSearchParams(urlObj.search).get('v')
     } else if (urlObj.hostname === 'youtu.be') {
