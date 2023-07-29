@@ -7,7 +7,7 @@ export class YoutubeClient {
   readonly api: typeof defaultKy
 
   constructor({
-    apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    apiKey = process.env.GOOGLE_API_KEY,
     apiBaseUrl = YOUTUBE_API_BASE_URL,
     ky = defaultKy
   }: {
@@ -32,7 +32,7 @@ export class YoutubeClient {
       .get(``, {
         searchParams: {
           id: videoId,
-          key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+          key: process.env.GOOGLE_API_KEY,
           part: 'snippet,contentDetails'
         }
       })
