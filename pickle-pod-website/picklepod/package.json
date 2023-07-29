@@ -6,10 +6,16 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "next": "^13.4.12",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-select": "^5.7.4",
+    "recordrtc": "^5.6.2",
+    "serve": "^14.0.1",
     "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
