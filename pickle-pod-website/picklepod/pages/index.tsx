@@ -142,8 +142,7 @@ const stopRecordingCallback = () => {
 }
 
 const IndexPage = () => {
-  const [selectedPodcaster, setSelectedPodcaster] = useState(null)
-
+  const [selectedPodcaster, setSelectedPodcaster] = useState(podcasters[0])
   const handleChange = (selectedOption) => {
     setSelectedPodcaster(selectedOption)
   }
