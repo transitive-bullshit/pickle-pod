@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { ElevenLabsClient, uploadToS3, generateId } from '@/lib'
+import { ElevenLabsClient, uploadToS3, generateId } from '@/server'
+import { ELEVEN_LABS_VOICE_ID } from '@/server/config'
 
-const voiceId = 'U1iLAvrBdqSzHH89CB7p'
+const voiceId = ELEVEN_LABS_VOICE_ID
 
 export default async function elevenLabsTextToSpeech(
   req: NextApiRequest,

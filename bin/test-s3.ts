@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import fs from 'fs/promises'
-import { uploadToS3 } from '@/lib'
+import { uploadToS3 } from '@/server'
 
 async function main() {
   const filename = 'test.mp3'

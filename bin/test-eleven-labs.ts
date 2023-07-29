@@ -1,10 +1,11 @@
 import 'dotenv/config'
 import fs from 'fs/promises'
 
-import { ElevenLabsClient } from '@/lib'
+import { ElevenLabsClient } from '@/server'
+import { ELEVEN_LABS_VOICE_ID } from '@/server/config'
 
 async function main() {
-  const voiceId = 'U1iLAvrBdqSzHH89CB7p'
+  const voiceId = ELEVEN_LABS_VOICE_ID
   const elevenLabs = new ElevenLabsClient()
 
   // const v = await elevenLabs.getVoices()

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { DexaClient } from '@/lib'
+import { DexaClient } from '@/server'
 
 export default async function generateDexaAnswerFromLex(
   req: NextApiRequest,

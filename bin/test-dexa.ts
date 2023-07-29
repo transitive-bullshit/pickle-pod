@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { DexaClient } from '@/lib'
+import { DexaClient } from '@/server'
 
 async function main() {
   const dexa = new DexaClient()
