@@ -26,6 +26,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     if (!videoPlayer.current) return
 
     const playerState: number = videoPlayer.current.getPlayerState()
+    console.log(playerState)
     setPlayerStatus(playerState)
   }, [])
 
@@ -68,12 +69,16 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                 width: '0',
                 height: '0',
                 playerVars: {
-                  autoplay: 1
+                  autoplay: 0
                 }
               }}
             />
 
-            <Button className={styles.playPause} onClick={onClickPlayPause}>
+            <Button
+              className={styles.playPause}
+              onClick={onClickPlayPause}
+              isLoading={playerStatus < 0}
+            >
               {playerStatus !== 1 ? (
                 <Play className={styles.playPauseIcon} />
               ) : (
