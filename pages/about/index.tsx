@@ -26,7 +26,7 @@ Hello there! We appreciate your curiosity about our project. It was just last Fr
 - Sasha: A lover of dogs, Sasha finds joy in both hacking systems and goofing around. Often found talking in dog language to any pup within a three-mile radius. Sasha wears her passion on her sleeve, and her twitter [@hackgoofer](https://twitter.com/hackgoofer).
 
 ![Travis](https://pbs.twimg.com/profile_images/1347656662463766529/igIs8izN_400x400.png)
-- Travis: A feline aficionado, Travis has a keen eye for the transitive property of bullshit... When he's not playing with kittens or buildin gAI appes, he's on a mission to make sense of the world's nonsense. Catch his hilarious insights on twitter [@transitive_bs](https://twitter.com/transitive_bs).
+- Travis: A feline aficionado, Travis has a keen eye for the transitive property of bullshit... When he's not playing with kittens or building AI appes, he's on a mission to make sense of the world's nonsense. Catch his hilarious insights on twitter [@transitive_bs](https://twitter.com/transitive_bs).
 `
 
 export default function AboutPage({
