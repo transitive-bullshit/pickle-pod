@@ -66,6 +66,7 @@
     "postcss": "^8.4.27",
     "prettier": "2",
     "shadcn-ui": "^0.3.0",
+    "sharp": "^0.32.4",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6"
   },
