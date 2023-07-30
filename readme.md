@@ -12,8 +12,8 @@
 
 - [Intro](#intro)
 - [How it works](#how-it-works)
-- [Local development](#local-development)
 - [Demo](#demo)
+- [Local development](#local-development)
 - [Contributions](#contributions)
 - [License](#license)
 
@@ -28,9 +28,15 @@
   - Dexa uses Pinecone hybrid search to retrieve the most relevant podcast chunks, applies cross-validation and re-ranking to ensure we only take into account transcript chunks that are relevant to the question, uses RAG + GPT-4 to generate an answer in the style of Lex Fridman, and then applies a post-processing step to minimize hallucination.
 - [ElevenLabs](https://elevenlabs.io) is used for text-to-speech to convert the resulting answer to audio using a custom voice trained on ~7 minutes of Lex Fridman's voice.
 
+## Demo
+
+[Demo](https://pickle-pod.vercel.app)
+
+Note, we may keep this running for a while but we will shut it down if it becomes expensive for us. Sowwy. But you should be able to run it on your own with the instructions specified under "Build Locally" section.
+
 ## Local development
 
-0. Install `pnpm`, please follow [link](https://pnpm.io/installation)
+0. [Install `pnpm`](https://pnpm.io/installation)
 1. Run `pnpm i` to install dependencies
 2. `cp .env.example .env` and fill in all of the environment variables:
 
@@ -47,13 +53,7 @@ AWS_S3_BUCKET=''
 GOOGLE_API_KEY=''
 ```
 
-3. run `pnpm dev` locally
-
-## Demo
-
-[Demo](https://pickle-pod.vercel.app)
-
-Note, we may keep this running for a while but we will shut it down if it becomes expensive for us. Sowwy. But you should be able to run it on your own with the instructions specified under "Build Locally" section.
+3. Run `pnpm dev`
 
 ## Contributions
 
