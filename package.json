@@ -31,7 +31,7 @@
     "file-type": "^18.5.0",
     "framer-motion": "^10.15.0",
     "ky": "^0.33.3",
-    "lucide-react": "^0.263.1",
+    "lucide-react": "0.261.0",
     "nanoid": "^4.0.2",
     "next": "^13.4.12",
     "react": "^18.2.0",
