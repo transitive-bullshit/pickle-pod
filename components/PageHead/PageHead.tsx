@@ -27,7 +27,7 @@ export const PageHead: React.FC<{
       <meta property='og:site_name' content={config.title} />
       <meta property='twitter:domain' content={config.domain} />
 
-      <meta name='twitter:creator' content={`@${config.twitter}`} />
+      <meta name='twitter:creator' content={`@${config.twitter1}`} />
 
       {description && (
         <>
