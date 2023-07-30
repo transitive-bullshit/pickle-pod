@@ -4,7 +4,7 @@ import * as React from 'react'
 import cs from 'clsx'
 import Image from 'next/image'
 
-import LogoDark from '@/public/logo.jpg'
+import LogoImage from '@/public/logo.png'
 
 import styles from './styles.module.css'
 
@@ -12,10 +12,10 @@ export const Logo: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <Image
       className={cs(styles.logo, className)}
-      src={LogoDark.src}
+      src={LogoImage.src}
       alt='Logo'
-      width={LogoDark.width}
-      height={LogoDark.height}
+      width={LogoImage.width}
+      height={LogoImage.height}
     />
   )
 }

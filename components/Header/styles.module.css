@@ -39,6 +39,7 @@
   justify-content: flex-end;
   align-items: center;
   height: 100%;
+  padding-right: 6px;
   gap: var(--gap-w-1);
 }
 
