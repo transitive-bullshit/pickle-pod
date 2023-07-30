@@ -345,7 +345,10 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { videoId: 'cdiD-9MMpb0' } }],
+    paths: [
+      { params: { videoId: 'cdiD-9MMpb0' } },
+      { params: { videoId: '34wA_bdG6QQ' } }
+    ],
     fallback: 'blocking'
   }
 }
