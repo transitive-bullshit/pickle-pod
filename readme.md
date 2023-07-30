@@ -14,23 +14,36 @@
   [ElevenLabs](https://elevenlabs.io) [Hackathon](https://lablab.ai/event/eleven-labs-ai-hackathon) project exploring what an interactive podcast listening experience would where you can pause and ask questions to the host and get answers in real-time.
 </p>
 
-Interactive Podcast Experience Powered by ElevenLabs & Dexa
+- [How it works](#how-it-works)
+- [Local development](#local-development)
+- [Demo](#demo)
+- [Contributions](#contributions)
+- [License](#license)
+
+## How it works
+
+- [Assembly AI](https://www.assemblyai.com) is used for real-time speech-to-text, so users can ask the podcast host questions using their voice.
+- [Dexa AI](https://dexa.ai) is used to generate realistic answers to text queries in the style of Lex Fridman, with a custom private RAG API trained on the transcripts across all ~400 episodes of the [Lex Fridman Podcast](https://lexfridman.com/podcast/).
+  - Dexa uses Pinecone hybrid search to retrieve the most relevant podcast chunks, applies cross-validation and re-ranking to ensure we only take into account transcript chunks that are relevant to the question, uses RAG + GPT-4 to generate an answer in the style of Lex Fridman, and then applies a post-processing step to minimize hallucination.
+- [ElevenLabs](https://elevenlabs.io) is used for text-to-speech to convert the resulting answer to audio using a custom voice trained on ~7 minutes of Lex Fridman's voice.
 
 ## Local development
 
 0. Install `pnpm`, please follow [link](https://pnpm.io/installation)
 1. Run `pnpm i` to install dependencies
-2. Add your own API keys to `.env` file, ours are with the following format:
+2. `cp .env.example .env` and fill in all of the environment variables:
 
 ```
-ELEVEN_LABS_API_KEY='xxxxx'
-ASSEMBLY_AI_API_KEY='yyyy'
-DEXA_API_BASE_URL='dexabase'
-AWS_ACCESS_KEY_ID='ttttt'
-AWS_SECRET_ACCESS_KEY='bbbbb'
-AWS_REGION='gggg'
-AWS_S3_BUCKET='eeee'
-GOOGLE_API_KEY='ddddd'
+ELEVEN_LABS_API_KEY=''
+ASSEMBLY_AI_API_KEY=''
+DEXA_API_BASE_URL=''
+
+AWS_ACCESS_KEY_ID=''
+AWS_SECRET_ACCESS_KEY=''
+AWS_REGION=''
+AWS_S3_BUCKET=''
+
+GOOGLE_API_KEY=''
 ```
 
 3. run `pnpm dev` locally
@@ -41,11 +54,15 @@ GOOGLE_API_KEY='ddddd'
 
 Note, we may keep this running for a while but we will shut it down if it becomes expensive for us. Sowwy. But you should be able to run it on your own with the instructions specified under "Build Locally" section.
 
-## Contribution
+## Contributions
 
-Pull requests are more than welcome.
+PRs are more than welcome.
 
-1. Currently we only support "Lex Fridman" since we have eleven labs' voice trained only on him. You can help us support more users. [hint, more female speakers!!]
-2. Currently only Youtube URLs are supported. Help us support more Podcast/audio type URLs.
+1. Currently we only support the "Lex Fridman Podcast" since we have eleven labs' voice trained only on him. You can help us support more users. [hint, more female speakers!!]
+2. Currently only YouTube URLs are supported. Help us support more Podcast/audio type URLs.
 3. Add some way to store Q/A, timestamp, clip info in a database of some sort
 4. A way for users to view other people's Q/As on the audio, we are thinking that it should kinda look like SoundCloud's Audio Waveform. See [this](https://i.stack.imgur.com/MXAzC.png)
+
+## License
+
+MIT © [Sasha Sheng](https://twitter.com/hackgoofer) and [Travis Fischer](https://twitter.com/transitive_bs)
