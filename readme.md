@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  [ElevenLabs](https://elevenlabs.io) [Hackathon](https://lablab.ai/event/eleven-labs-ai-hackathon) project exploring what an interactive podcast listening experience would where you can pause and ask questions to the host and get answers in real-time.
+  <a href="https://elevenlabs.io">ElevenLabs</a> Hackathon project exploring what an interactive podcast listening experience would where you can pause and ask questions to the host and get answers in real-time.
 </p>
 
 - [How it works](#how-it-works)
@@ -50,7 +50,7 @@ GOOGLE_API_KEY=''
 
 ## Demo
 
-[Link](https://pickle-pod.vercel.app/)
+[Demo](https://pickle-pod.vercel.app)
 
 Note, we may keep this running for a while but we will shut it down if it becomes expensive for us. Sowwy. But you should be able to run it on your own with the instructions specified under "Build Locally" section.
 
