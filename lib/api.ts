@@ -17,3 +17,25 @@ export async function getYoutubeMetadata(videoId: string) {
 
   return res
 }
+
+export async function generateDexaAnswerFromLex(query: string) {
+  const url = `${config.apiBaseUrl}/api/dexa?query=${query})`
+
+  const res = await ky(url).json<any>()
+
+  return res
+}
+
+export async function textToSpeech(text: string) {
+  const url = `${config.apiBaseUrl}/api/tts`
+
+  const res = await ky
+    .post(url, {
+      json: {
+        text: text
+      }
+    })
+    .json<any>()
+
+  return res
+}

@@ -4,7 +4,11 @@ import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { getYoutubeMetadata } from '@/lib/api'
+import {
+  generateDexaAnswerFromLex,
+  getYoutubeMetadata,
+  textToSpeech
+} from '@/lib/api'
 
 const podcasters = [{ value: 'lex-fridman', label: 'Lex Fridman' }]
 
@@ -19,7 +23,7 @@ const IndexPage = () => {
     console.log('start')
   }
 
-  const handleURLOnChange = (e) => {
+  const handleURLOnChange = async (e) => {
     const enteredURL: string = e.target.value
     setUrl(enteredURL)
 
@@ -27,7 +31,12 @@ const IndexPage = () => {
       const videoId = getVideoId(enteredURL)
 
       console.log(videoId)
-      getMetadata(videoId)
+      const metadata = await getMetadata(videoId)
+      // const dexaAnswer = await generateDexaAnswerFromLex(
+      //   'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
+      // )
+      // const speech = await textToSpeech(dexaAnswer['answer'])
+      // console.log(speech)
     }
   }
 

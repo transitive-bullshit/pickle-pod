@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 import { DexaClient } from '@/server'
 
 export default async function generateDexaAnswerFromLex(
@@ -19,7 +20,6 @@ export default async function generateDexaAnswerFromLex(
   try {
     const dexa = new DexaClient()
     const answer = await dexa.generateDexaAnswerFromLex(query)
-
     res.json({ answer })
   } catch (err) {
     console.error('dexa api error', err)

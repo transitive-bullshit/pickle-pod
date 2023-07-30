@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { ElevenLabsClient, uploadToS3, generateId } from '@/server'
+
+import { ElevenLabsClient, generateId, uploadToS3 } from '@/server'
 import { ELEVEN_LABS_VOICE_ID } from '@/server/config'
 
 const voiceId = ELEVEN_LABS_VOICE_ID
