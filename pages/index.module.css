@@ -19,7 +19,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: var(--gap);
+  gap: var(--gap-2);
 }
 
 .form {
@@ -31,6 +31,10 @@
 
 .example {
   margin-bottom: 0.5em;
+}
+
+.links {
+  line-height: 2;
 }
 
 .link {

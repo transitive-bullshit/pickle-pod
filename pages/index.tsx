@@ -107,22 +107,24 @@ const IndexPage = () => {
         </div>
 
         <div className='text-center mt-2 w-full'>
-          <p className={styles.example}>Or choose an example video:</p>
-          <Link className={styles.link} href='/listen/gk4tEO4jDUM'>
-            Lex & Joe Rogan
-          </Link>{' '}
-          |{' '}
-          <Link className={styles.link} href='/listen/DxREm3s1scA'>
-            Lex & Elon Musk
-          </Link>{' '}
-          |{' '}
-          <Link className={styles.link} href='/listen/4dC_nRYIDZU'>
-            Lex & Sam Harris
-          </Link>{' '}
-          |{' '}
-          <Link className={styles.link} href='/listen/Ff4fRgnuFgQ'>
-            Lex & Mark Zuckerberg
-          </Link>
+          <div className={styles.example}>Or choose an example video:</div>
+          <p className={styles.links}>
+            <Link className={styles.link} href='/listen/gk4tEO4jDUM'>
+              Lex & Joe Rogan
+            </Link>{' '}
+            |{' '}
+            <Link className={styles.link} href='/listen/DxREm3s1scA'>
+              Lex & Elon Musk
+            </Link>{' '}
+            |{' '}
+            <Link className={styles.link} href='/listen/4dC_nRYIDZU'>
+              Lex & Sam Harris
+            </Link>{' '}
+            |{' '}
+            <Link className={styles.link} href='/listen/Ff4fRgnuFgQ'>
+              Lex & Mark Zuckerberg
+            </Link>
+          </p>
         </div>
       </div>
 
