@@ -18,7 +18,7 @@ Hello there! We appreciate your curiosity about our project. It was just last Fr
 - Dexa API (to allow for Q/A interface)
 - Eleven Labs (for text to voice)
 
-## Please play at:  "[Demo](https://pickle-pod.vercel.app/)"
+## Please play at:  [Demo](https://pickle-pod.vercel.app/)
 
 ## Creators
 ![Sasha](https://pbs.twimg.com/profile_images/1652410947238252544/Bz1MvaNg_400x400.jpg)
