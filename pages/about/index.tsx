@@ -21,7 +21,9 @@ Hello there! We appreciate your curiosity about our project. It was just last Fr
 ## Please play at:  "[Demo](https://pickle-pod.vercel.app/)"
 
 ## Creators
+![Sasha](https://pbs.twimg.com/profile_images/1652410947238252544/Bz1MvaNg_400x400.jpg)
 - Sasha: A connoisseur of all things canine, Sasha finds joy in both hacking systems and goofing around. Often found talking in dog language to any pup within a three-mile radius. Sasha wears her passion on her sleeve, and her social media handle, as 'hackgoofer'.
+![Travis](https://pbs.twimg.com/profile_images/1347656662463766529/igIs8izN_400x400.png)
 - Travis: An aficionado of felines, Travis has a keen eye for the transitive property of balderdash. When he's not playing with kittens or immersed in complex theories, he's on a mission to make sense of the world's nonsense. Catch his hilarious insights at his social media handle, 'transitivebullshit'.
 `
 
