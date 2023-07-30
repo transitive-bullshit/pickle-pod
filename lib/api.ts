@@ -11,31 +11,33 @@ export async function fetchAssemblyAIRealtimeToken() {
 }
 
 export async function getYoutubeMetadata(videoId: string) {
-  const url = `${config.apiBaseUrl}/api/youtube?videoId=${videoId}`
+  const url = `${config.apiBaseUrl}/api/youtube`
 
-  const res = await ky(url).json<any>()
-
-  return res
+  return ky(url, {
+    searchParams: {
+      videoId
+    }
+  }).json<any>()
 }
 
 export async function generateDexaAnswerFromLex(query: string) {
-  const url = `${config.apiBaseUrl}/api/dexa?query=${query})`
+  const url = `${config.apiBaseUrl}/api/dexa`
 
-  const res = await ky(url).json<any>()
-
-  return res
+  return ky(url, {
+    searchParams: {
+      query
+    }
+  }).json<{ answer: string }>()
 }
 
 export async function textToSpeech(text: string) {
   const url = `${config.apiBaseUrl}/api/tts`
 
-  const res = await ky
+  return ky
     .post(url, {
       json: {
         text: text
       }
     })
-    .json<any>()
-
-  return res
+    .json<{ audioUrl: string }>()
 }

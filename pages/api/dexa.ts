@@ -19,6 +19,7 @@ export default async function generateDexaAnswerFromLex(
 
   try {
     const dexa = new DexaClient()
+    console.log('dexa', { query })
     const answer = await dexa.generateDexaAnswerFromLex(query)
     res.json({ answer })
   } catch (err) {

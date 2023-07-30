@@ -1,8 +1,13 @@
 import * as React from 'react'
 import cs from 'clsx'
-import { format } from 'date-fns'
 import Image from 'next/image'
 import YouTube, { YouTubeEvent } from 'react-youtube'
+import {
+  fetchAssemblyAIRealtimeToken,
+  generateDexaAnswerFromLex,
+  textToSpeech,
+  getYoutubeMetadata
+} from '@/lib/api'
 import type RecordRTCType from 'recordrtc'
 import { Drawer } from 'vaul'
 
@@ -12,7 +17,6 @@ import { Button } from '@/components/Button/Button'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
 import { HelpCircle, Mic, Pause, Play } from '@/icons'
-import { fetchAssemblyAIRealtimeToken, getYoutubeMetadata } from '@/lib/api'
 
 import styles from './styles.module.css'
 
@@ -26,6 +30,9 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [transcription, setTranscription] = React.useState('')
   const [isRecording, setIsRecording] = React.useState(false)
+  const [questionStatus, setQuestionStatus] = React.useState<string>('')
+  const [audioUrl, setAudioUrl] = React.useState<string>()
+  const [answer, setAnswer] = React.useState<string>()
   const videoPlayer = React.useRef<any>(null)
 
   React.useEffect(() => {
@@ -72,6 +79,23 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     console.log(recordedChunks)
   }, [isRecording])
 
+  const finishRecording = React.useCallback(async () => {
+    stopRecording()
+
+    if (!transcription || questionStatus !== 'recording') {
+      return
+    }
+
+    setQuestionStatus('submitting')
+
+    const { answer } = await generateDexaAnswerFromLex(transcription)
+    setAnswer(answer)
+    const { audioUrl } = await textToSpeech(answer)
+
+    setAudioUrl(audioUrl)
+    setQuestionStatus('complete')
+  }, [stopRecording, transcription, questionStatus])
+
   const onClickAskQuestion = React.useCallback(async () => {
     if (!videoPlayer.current) return
 
@@ -85,6 +109,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
       .default as typeof RecordRTCType
 
     const token = await fetchAssemblyAIRealtimeToken()
+    setQuestionStatus('recording')
 
     socket = new WebSocket(
       `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
@@ -95,9 +120,6 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
       let msg = ''
       const res = JSON.parse(message.data)
       const msgType = res.message_type
-      if (msgType === 'FinalTranscript') {
-        stopRecording()
-      }
 
       console.log('socket', res)
 
@@ -116,6 +138,10 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
       setTranscription(msg)
       console.log('message', msg)
+
+      if (msgType === 'FinalTranscript') {
+        finishRecording()
+      }
     }
 
     socket.onerror = (event: any) => {
@@ -165,6 +191,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   React.useEffect(() => {
     if (!isDialogOpen) {
       stopRecording()
+      setQuestionStatus('')
     }
   }, [isDialogOpen])
 
@@ -197,7 +224,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               }}
             />
 
-            <div className={styles.date}>{podcast.publishedAtFormatted}</div>
+            <div className={styles.date}>{podcast.publishedAt}</div>
 
             <h1 className={cs(styles.title)}>{podcast.title}</h1>
 
@@ -244,15 +271,53 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                 <div className='mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8' />
 
                 <div className='flex flex-col max-w-md mx-auto'>
-                  <Drawer.Title className='font-medium mb-4'>
-                    Speak your question for Lex.
-                  </Drawer.Title>
+                  {(questionStatus === 'recording' || !questionStatus) && (
+                    <>
+                      <Drawer.Title className='font-medium mb-4'>
+                        Speak your question for Lex.
+                      </Drawer.Title>
 
-                  <p className='text-zinc-600 mb-2'>{transcription || ''}</p>
+                      <p className='text-zinc-600 mb-2'>{transcription}</p>
 
-                  <div className={styles.recordButton} onClick={stopRecording}>
-                    <Mic className={styles.micIcon} />
-                  </div>
+                      <div
+                        className={styles.recordButton}
+                        onClick={finishRecording}
+                      >
+                        <Mic className={styles.micIcon} />
+                      </div>
+                    </>
+                  )}
+
+                  {questionStatus === 'submitting' && (
+                    <>
+                      <Drawer.Title className='font-medium mb-4'>
+                        {transcription}
+                      </Drawer.Title>
+
+                      <p>Loading...</p>
+
+                      {answer && <p>{answer}</p>}
+                    </>
+                  )}
+
+                  {questionStatus === 'complete' && (
+                    <>
+                      <Drawer.Title className='font-medium mb-4'>
+                        {transcription}
+                      </Drawer.Title>
+
+                      {answer && <p>{answer}</p>}
+
+                      <audio src={audioUrl} controls />
+
+                      {/* <div
+                        className={styles.recordButton}
+                        onClick={finishRecording}
+                      >
+                        <Mic className={styles.micIcon} />
+                      </div> */}
+                    </>
+                  )}
                 </div>
               </div>
             </Drawer.Content>

@@ -74,8 +74,16 @@
   align-self: center;
   display: inline-flex;
   padding: 12px;
-  background: #d0433b !important;
+  background: #d0433b;
   border-radius: 50%;
+}
+
+.recordButton:hover {
+  background: #a52822;
+}
+
+.recordButton:active {
+  background: #670c07;
 }
 
 .micIcon {
