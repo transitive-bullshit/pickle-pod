@@ -20,6 +20,7 @@ import {
 } from '@/lib/api'
 
 import styles from './styles.module.css'
+import { YoutubeClient } from '@/server/youtube'
 
 let recorder: any
 let recordedChunks: any = []
@@ -368,9 +369,18 @@ export const getStaticProps = async (context) => {
   }
 
   try {
-    const metadata = await getYoutubeMetadata(youtubeId)
-    const snippet = metadata.snippet
+    const youtube = new YoutubeClient()
+    const metadata = await youtube.getMetadata(youtubeId)
+
+    if (!metadata?.items?.length) {
+      return {
+        notFound: true
+      }
+    }
+
+    const snippet = metadata.items[0]['snippet']
     const thumbnail = snippet.thumbnails.standard
+    const contentDetails = metadata.items[0]['contentDetails']
 
     const podcast: types.Podcast = {
       youtubeId,
@@ -383,7 +393,7 @@ export const getStaticProps = async (context) => {
       thumbnailUrl: thumbnail.url,
       thumbnailWidth: thumbnail.width,
       thumbnailheight: thumbnail.height,
-      duration: metadata.contentDetails.duration
+      duration: contentDetails.duration
     }
 
     return {
