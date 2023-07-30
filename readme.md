@@ -10,15 +10,16 @@
   <a href="https://prettier.io"><img alt="Prettier Code Formatting" src="https://img.shields.io/badge/code_style-prettier-brightgreen.svg"></a>
 </p>
 
-<p align="center">
-  <a href="https://elevenlabs.io">ElevenLabs</a> Hackathon project exploring what an interactive podcast listening experience would where you can pause and ask questions to the host and get answers in real-time.
-</p>
-
+- [Intro](#intro)
 - [How it works](#how-it-works)
 - [Local development](#local-development)
 - [Demo](#demo)
 - [Contributions](#contributions)
 - [License](#license)
+
+## Intro
+
+[ElevenLabs](https://elevenlabs.io) [hackathon](https://lablab.ai/event/eleven-labs-ai-hackathon) project exploring what an interactive podcast listening experience would where you can pause and ask questions to the host and get answers in real-time.
 
 ## How it works
 
