@@ -137,7 +137,8 @@ export class AssemblyAIClient {
         },
         headers: {
           'Content-Type': 'application/octet-stream'
-        }
+        },
+        timeout: 60000
       })
       .json<Transcription>()
 

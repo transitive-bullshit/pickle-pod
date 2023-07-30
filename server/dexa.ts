@@ -32,7 +32,8 @@ export class DexaClient {
       },
       headers: {
         Accept: 'text/event-stream'
-      }
+      },
+      timeout: 30000
     })
 
     // TODO: get streaming working

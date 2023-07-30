@@ -27,7 +27,7 @@ export async function generateDexaAnswerFromLex(query: string) {
     searchParams: {
       query
     },
-    timeout: 20000
+    timeout: 30000
   }).json<{ answer: string }>()
 }
 
@@ -39,7 +39,7 @@ export async function textToSpeech(text: string) {
       json: {
         text: text
       },
-      timeout: 20000
+      timeout: 60000
     })
     .json<{ audioUrl: string }>()
 }

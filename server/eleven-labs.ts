@@ -137,7 +137,8 @@ export class ElevenLabsClient {
         },
         headers: {
           accept: 'audio/mpeg'
-        }
+        },
+        timeout: 60000
       })
       .arrayBuffer()
 
