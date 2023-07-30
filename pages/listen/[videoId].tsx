@@ -214,60 +214,62 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
       <div className={styles.homePage}>
         <div className={styles.body}>
-          <div className={cs(styles.section)}>
-            <Image
-              className={styles.thumbnail}
-              src={podcast.thumbnailUrl}
-              width={podcast.thumbnailWidth}
-              height={podcast.thumbnailheight}
-              alt='Youtube Thumbnail'
-            />
+          {podcast && (
+            <div className={cs(styles.section)}>
+              <Image
+                className={styles.thumbnail}
+                src={podcast.thumbnailUrl}
+                width={podcast.thumbnailWidth}
+                height={podcast.thumbnailheight}
+                alt='Youtube Thumbnail'
+              />
 
-            <YouTube
-              className={styles.video}
-              videoId={podcast.youtubeId}
-              onReady={onPlayerReady}
-              onStateChange={onPlayerStateChanged}
-              opts={{
-                width: '0',
-                height: '0',
-                playerVars: {
-                  autoplay: 0
-                }
-              }}
-            />
+              <YouTube
+                className={styles.video}
+                videoId={podcast.youtubeId}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChanged}
+                opts={{
+                  width: '0',
+                  height: '0',
+                  playerVars: {
+                    autoplay: 0
+                  }
+                }}
+              />
 
-            <div className={styles.wrapper}>
-              <div className={styles.date}>{podcast.publishedAt}</div>
+              <div className={styles.wrapper}>
+                <div className={styles.date}>{podcast.publishedAt}</div>
 
-              <h1 className={cs(styles.title)}>{podcast.title}</h1>
+                <h1 className={cs(styles.title)}>{podcast.title}</h1>
+              </div>
+
+              <div className={styles.actions}>
+                <Button
+                  className={styles.actionButton}
+                  onClick={onClickPlayPause}
+                  isLoading={playerStatus < 0}
+                >
+                  {playerStatus !== 1 ? (
+                    <Play className={styles.actionIcon} />
+                  ) : (
+                    <Pause className={styles.actionIcon} />
+                  )}
+                </Button>
+
+                <Button
+                  className={styles.actionButton}
+                  onClick={onClickAskQuestion}
+                >
+                  <HelpCircle className={styles.actionIcon} />
+                </Button>
+              </div>
             </div>
-
-            <div className={styles.actions}>
-              <Button
-                className={styles.actionButton}
-                onClick={onClickPlayPause}
-                isLoading={playerStatus < 0}
-              >
-                {playerStatus !== 1 ? (
-                  <Play className={styles.actionIcon} />
-                ) : (
-                  <Pause className={styles.actionIcon} />
-                )}
-              </Button>
-
-              <Button
-                className={styles.actionButton}
-                onClick={onClickAskQuestion}
-              >
-                <HelpCircle className={styles.actionIcon} />
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {isMounted && (
+      {isMounted && podcast && (
         <Drawer.Root
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
@@ -353,12 +355,18 @@ export async function getStaticPaths() {
       '/listen/4dC_nRYIDZU',
       '/listen/Ff4fRgnuFgQ'
     ],
-    fallback: 'blocking'
+    fallback: true
   }
 }
 
 export const getStaticProps = async (context) => {
   const youtubeId = context.params?.videoId as string
+  if (!youtubeId) {
+    return {
+      notFound: true
+    }
+  }
+
   try {
     const metadata = await getYoutubeMetadata(youtubeId)
     const snippet = metadata.snippet
@@ -384,7 +392,8 @@ export const getStaticProps = async (context) => {
       }
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error('youtube error', error)
+
     return {
       notFound: true
     }
