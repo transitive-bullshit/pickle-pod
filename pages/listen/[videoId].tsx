@@ -1,7 +1,6 @@
 import * as React from 'react'
 import cs from 'clsx'
 import Image from 'next/image'
-import toast, { Toaster } from 'react-hot-toast'
 import YouTube, { YouTubeEvent } from 'react-youtube'
 import type RecordRTCType from 'recordrtc'
 import { Drawer } from 'vaul'
@@ -11,6 +10,7 @@ import { Button } from '@/components/Button/Button'
 // import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
+import { ProgressBar } from '@/components/ProgressBar/ProgressBar'
 import { HelpCircle, Mic, Pause, Play } from '@/icons'
 import {
   fetchAssemblyAIRealtimeToken,
@@ -18,9 +18,9 @@ import {
   getYoutubeMetadata,
   textToSpeech
 } from '@/lib/api'
+import { YoutubeClient } from '@/server/youtube'
 
 import styles from './styles.module.css'
-import { YoutubeClient } from '@/server/youtube'
 
 let recorder: any
 let recordedChunks: any = []
@@ -35,7 +35,9 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [questionStatus, setQuestionStatus] = React.useState<string>('')
   const [audioUrl, setAudioUrl] = React.useState<string>()
   const [answer, setAnswer] = React.useState<string>()
+  const [progress, setProgress] = React.useState<number>(0)
   const videoPlayer = React.useRef<any>(null)
+  const intervalRef = React.useRef<any>(null)
 
   React.useEffect(() => {
     setIsMounted(true)
@@ -47,11 +49,32 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
   const onPlayerStateChanged = React.useCallback(() => {
     if (!videoPlayer.current) return
-
     const playerState: number = videoPlayer.current.getPlayerState()
+
+    if (playerState === YouTube.PlayerState.PLAYING) {
+      intervalRef.current = setInterval(updateProgressBar, 1000) // update every second
+      console.log('intervalRef.current', intervalRef.current)
+    } else {
+      clearInterval(intervalRef.current)
+    }
+
     console.log(playerState)
     setPlayerStatus(playerState)
   }, [])
+
+  const updateProgressBar = () => {
+    console.log('update')
+    const currentTime = videoPlayer.current.getCurrentTime()
+    const duration = videoPlayer.current.getDuration()
+    console.log({ currentTime, duration })
+    setProgress((currentTime / duration) * 100)
+  }
+
+  const onSeek = (value) => {
+    console.log('seek')
+    const newTime = (value / 100) * videoPlayer.current.getDuration()
+    videoPlayer.current.seekTo(newTime)
+  }
 
   const onClickPlayPause = React.useCallback(() => {
     if (!videoPlayer.current) return
@@ -224,7 +247,6 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                 height={podcast.thumbnailheight}
                 alt='Youtube Thumbnail'
               />
-
               <YouTube
                 className={styles.video}
                 videoId={podcast.youtubeId}
@@ -238,13 +260,18 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
                   }
                 }}
               />
-
               <div className={styles.wrapper}>
                 <div className={styles.date}>{podcast.publishedAt}</div>
 
                 <h1 className={cs(styles.title)}>{podcast.title}</h1>
               </div>
-
+              <ProgressBar
+                value={progress}
+                backgroundColor={'#D3D3D3'}
+                progressColor={'#7027D3'}
+                onSeek={onSeek}
+                buffering={playerStatus === 3}
+              />
               <div className={styles.actions}>
                 <Button
                   className={styles.actionButton}
