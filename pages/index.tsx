@@ -71,8 +71,8 @@ const IndexPage = () => {
         placeholder='YouTube URL'
       />
       <Link href={`/listen/${videoId}`}>
-        <Button variant='outline' onClick={handleStart}>
-          Start
+        <Button className='mt-4' variant='outline' onClick={handleStart}>
+          Go
         </Button>
       </Link>
     </Layout>
