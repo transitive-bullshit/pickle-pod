@@ -28,8 +28,8 @@ export const Header: React.FC<{ className?: string }> = ({ className }) => {
 
           <a
             className={cs(styles.twitter, styles.social)}
-            href={config.twitterUrl}
-            title={`Twitter ${config.twitter}`}
+            href={config.twitterUrl1}
+            title={`Twitter ${config.twitter1}`}
             target='_blank'
             rel='noopener noreferrer'
           >

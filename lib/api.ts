@@ -26,7 +26,8 @@ export async function generateDexaAnswerFromLex(query: string) {
   return ky(url, {
     searchParams: {
       query
-    }
+    },
+    timeout: 20000
   }).json<{ answer: string }>()
 }
 
@@ -37,7 +38,8 @@ export async function textToSpeech(text: string) {
     .post(url, {
       json: {
         text: text
-      }
+      },
+      timeout: 20000
     })
     .json<{ audioUrl: string }>()
 }

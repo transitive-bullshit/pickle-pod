@@ -68,6 +68,8 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
     setIsRecording(false)
     recorder.stopRecording(() => {
+      if (!socket) return
+
       socket.send(JSON.stringify({ terminate_session: true }))
       socket.close()
       socket = null
@@ -85,12 +87,17 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     if (!transcription || questionStatus !== 'recording') {
       return
     }
+    const question = transcription
 
+    setAnswer('')
     setQuestionStatus('submitting')
 
-    const { answer } = await generateDexaAnswerFromLex(transcription)
+    const { answer } = await generateDexaAnswerFromLex(question)
+    if (transcription !== question) return
+
     setAnswer(answer)
     const { audioUrl } = await textToSpeech(answer)
+    if (transcription !== question) return
 
     setAudioUrl(audioUrl)
     setQuestionStatus('complete')
@@ -98,6 +105,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
   const onClickAskQuestion = React.useCallback(async () => {
     if (!videoPlayer.current) return
+    setTranscription('')
 
     videoPlayer.current.pauseVideo()
 
@@ -134,6 +142,10 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
           }
           msg += ` ${texts[key]}`
         }
+      }
+
+      if (msg.endsWith('.')) {
+        msg = msg.slice(0, -1) + '?'
       }
 
       setTranscription(msg)
@@ -270,10 +282,10 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               <div className='p-4 bg-white rounded-t-[10px] flex-1'>
                 <div className='mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8' />
 
-                <div className='flex flex-col max-w-md mx-auto'>
+                <div className='flex flex-col max-w-md mx-auto gap-4'>
                   {(questionStatus === 'recording' || !questionStatus) && (
                     <>
-                      <Drawer.Title className='font-medium mb-4'>
+                      <Drawer.Title className='font-medium'>
                         Speak your question for Lex.
                       </Drawer.Title>
 
@@ -290,25 +302,25 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
                   {questionStatus === 'submitting' && (
                     <>
-                      <Drawer.Title className='font-medium mb-4'>
+                      <Drawer.Title className='font-medium'>
                         {transcription}
                       </Drawer.Title>
 
-                      <p>Loading...</p>
-
                       {answer && <p>{answer}</p>}
+
+                      <p>Loading...</p>
                     </>
                   )}
 
                   {questionStatus === 'complete' && (
                     <>
-                      <Drawer.Title className='font-medium mb-4'>
+                      <Drawer.Title className='font-medium'>
                         {transcription}
                       </Drawer.Title>
 
                       {answer && <p>{answer}</p>}
 
-                      <audio src={audioUrl} controls />
+                      <audio src={audioUrl} controls autoPlay />
 
                       {/* <div
                         className={styles.recordButton}
