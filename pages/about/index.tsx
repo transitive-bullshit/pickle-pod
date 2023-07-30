@@ -15,7 +15,9 @@ TODO
 
 ## License
 
-This website is [open source](${config.githubRepoUrl}). MIT © [${config.author0}](${config.twitterUrl0}) and [${config.author1}](${config.twitterUrl1})
+MIT © [${config.author0}](${config.twitterUrl0}) and [${config.author1}](${config.twitterUrl1})
+
+This website is [open source](${config.githubRepoUrl}).
 `
 
 export default function AboutPage({
