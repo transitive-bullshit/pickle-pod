@@ -32,11 +32,11 @@ const IndexPage = () => {
 
       console.log(videoId)
       const metadata = await getMetadata(videoId)
-      // const dexaAnswer = await generateDexaAnswerFromLex(
-      //   'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
-      // )
-      // const speech = await textToSpeech(dexaAnswer['answer'])
-      // console.log(speech)
+      const dexaAnswer = await generateDexaAnswerFromLex(
+        'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
+      )
+      const speech = await textToSpeech(dexaAnswer['answer'])
+      console.log(speech)
     }
   }
 

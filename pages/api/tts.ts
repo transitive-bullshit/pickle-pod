@@ -9,11 +9,13 @@ export default async function elevenLabsTextToSpeech(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log('eleven labs')
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'method not allowed' })
     return
   }
 
+  console.log(req.body)
   const text: string = req.body.text
   if (!text) {
     res.status(400).json({ error: 'text is required' })
