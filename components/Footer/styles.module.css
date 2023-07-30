@@ -85,3 +85,36 @@
     order: 3;
   }
 }
+
+.footer .copyright a {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: inherit;
+  line-height: 1.3;
+  position: relative;
+  transition: unset;
+  opacity: 1;
+  color: unset;
+  border-color: var(--fg-color-2);
+  border-bottom-width: 0.135rem;
+  background: transparent;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 0 0.135rem;
+}
+
+.footer .copyright a:hover,
+.footer .copyright a:focus {
+  color: var(--tw-prose-links);
+  text-decoration: none;
+  border-bottom-color: transparent;
+
+  background-image: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.135rem;
+
+  transition-property: background-position, background-size;
+  transition-duration: 300ms;
+}
