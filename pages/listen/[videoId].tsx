@@ -8,15 +8,12 @@ import { Drawer } from 'vaul'
 
 import * as types from '@/lib/types'
 import { Button } from '@/components/Button/Button'
-// import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
-// import { ProgressBar } from '@/components/ProgressBar/ProgressBar'
 import { HelpCircle, Mic, Pause, Play } from '@/icons'
 import {
   fetchAssemblyAIRealtimeToken,
   generateDexaAnswerFromLex,
-  getYoutubeMetadata,
   textToSpeech
 } from '@/lib/api'
 import { YoutubeClient } from '@/server/youtube'
@@ -26,6 +23,20 @@ import styles from './styles.module.css'
 let recorder: any
 let recordedChunks: any = []
 let socket: any
+
+function secondsToHms(d) {
+  d = Number(d)
+
+  var h = Math.floor(d / 3600)
+  var m = Math.floor((d % 3600) / 60)
+  var s = Math.floor((d % 3600) % 60)
+
+  var hDisplay = h > 0 ? (h < 10 ? '0' : '') + h + ':' : ''
+  var mDisplay = (m < 10 ? '0' : '') + m + ':'
+  var sDisplay = (s < 10 ? '0' : '') + s
+
+  return hDisplay + mDisplay + sDisplay
+}
 
 export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [playerStatus, setPlayerStatus] = React.useState<number>(-1)
@@ -37,6 +48,9 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   const [audioUrl, setAudioUrl] = React.useState<string>()
   const [answer, setAnswer] = React.useState<string>()
   const [progress, setProgress] = React.useState<number>(0)
+  const [duration, setDuration] = React.useState<number>(0)
+  const [currentTime, setCurrentTime] = React.useState<number>(0)
+
   const videoPlayer = React.useRef<any>(null)
   const intervalRef = React.useRef<any>(null)
 
@@ -46,6 +60,8 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
   const onPlayerReady = React.useCallback((event: YouTubeEvent) => {
     videoPlayer.current = event.target
+    const duration = videoPlayer.current.getDuration()
+    setDuration(duration)
   }, [])
 
   const onPlayerStateChanged = React.useCallback(() => {
@@ -64,15 +80,13 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   }, [])
 
   const updateProgressBar = () => {
-    console.log('update')
     const currentTime = videoPlayer.current.getCurrentTime()
-    const duration = videoPlayer.current.getDuration()
     console.log({ currentTime, duration })
+    setCurrentTime(currentTime)
     setProgress((currentTime / duration) * 100)
   }
 
   const onSeek = (value) => {
-    console.log('seek')
     const newTime = (value / 100) * videoPlayer.current.getDuration()
     videoPlayer.current.seekTo(newTime)
   }
@@ -263,27 +277,25 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               />
               <div className={styles.wrapper}>
                 <div className={styles.date}>{podcast.publishedAt}</div>
-
                 <h1 className={cs(styles.title)}>{podcast.title}</h1>
               </div>
-              <SeekBar
-                className='[&>input]:w-full'
-                getNumber={onSeek}
-                backgroundColor='#D3D3D3'
-                fillColor='#7027D3'
-                fillSecondaryColor='blue'
-                headColor='white'
-                headShadow='white'
-                headShadowSize={6}
-                progress={progress}
-              />
-              {/* <ProgressBar
-                value={progress}
-                backgroundColor={'#D3D3D3'}
-                progressColor={'#7027D3'}
-                onSeek={onSeek}
-                buffering={playerStatus === 3}
-              /> */}
+              <div>
+                <SeekBar
+                  className='[&>input]:w-full'
+                  getNumber={onSeek}
+                  backgroundColor='#D3D3D3'
+                  fillColor='#7027D3'
+                  fillSecondaryColor='blue'
+                  headColor='white'
+                  headShadow='white'
+                  headShadowSize={6}
+                  progress={progress}
+                />
+                <div className='flex justify-between'>
+                  <text>{secondsToHms(currentTime)}</text>
+                  <text>{secondsToHms(duration)}</text>
+                </div>
+              </div>
               <div className={styles.actions}>
                 <Button
                   className={styles.actionButton}
