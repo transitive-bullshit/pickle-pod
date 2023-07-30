@@ -94,9 +94,6 @@ devDependencies:
   husky:
     specifier: ^8.0.3
     version: 8.0.3
-  iso8601-duration:
-    specifier: ^2.1.1
-    version: 2.1.1
   lint-staged:
     specifier: ^13.2.3
     version: 13.2.3
@@ -3382,10 +3379,6 @@ packages:
 
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
-    dev: true
-
-  /iso8601-duration@2.1.1:
-    resolution: {integrity: sha512-VGGpW30/R57FpG1J7RqqKBAaK7lIiudlZkQ5tRoO9hNlKYQNnhs60DQpXlPFBmp6I+kJ61PHkI3f/T7cR4wfbw==}
     dev: true
 
   /javascript-natural-sort@0.7.1:

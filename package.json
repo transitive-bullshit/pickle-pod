@@ -39,8 +39,8 @@
     "react-select": "^5.7.4",
     "react-youtube": "^10.1.0",
     "recordrtc": "^5.6.2",
-    "tailwindcss": "^3.3.3",
     "tailwind-merge": "^1.14.0",
+    "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.6",
     "vaul": "^0.1.1"
   },
@@ -53,7 +53,6 @@
     "date-fns": "2.0.0-beta.5",
     "dotenv": "^16.0.3",
     "husky": "^8.0.3",
-    "iso8601-duration": "^2.1.1",
     "lint-staged": "^13.2.3",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.27",
