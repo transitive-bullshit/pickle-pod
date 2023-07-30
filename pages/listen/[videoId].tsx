@@ -236,9 +236,11 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
               }}
             />
 
-            <div className={styles.date}>{podcast.publishedAt}</div>
+            <div className={styles.wrapper}>
+              <div className={styles.date}>{podcast.publishedAt}</div>
 
-            <h1 className={cs(styles.title)}>{podcast.title}</h1>
+              <h1 className={cs(styles.title)}>{podcast.title}</h1>
+            </div>
 
             <div className={styles.actions}>
               <Button
