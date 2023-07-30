@@ -1,6 +1,5 @@
 import * as React from 'react'
 import cs from 'clsx'
-import { convertYouTubeDuration } from 'duration-iso-8601'
 import Image from 'next/image'
 import YouTube, { YouTubeEvent } from 'react-youtube'
 import { format } from 'date-fns'
@@ -12,7 +11,7 @@ import type RecordRTCType from 'recordrtc'
 // import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
-import { Play, Pause, HelpCircle } from '@/icons'
+import { Play, Pause, HelpCircle, Mic } from '@/icons'
 import * as types from '@/lib/types'
 
 import styles from './styles.module.css'
@@ -57,11 +56,11 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
   }, [])
 
   const stopRecording = React.useCallback(() => {
-    if (!socket || !recorder) return
+    console.log('stop', { socket, recorder, isRecording })
+    if (!socket || !recorder || !isRecording) return
 
+    setIsRecording(false)
     recorder.stopRecording(() => {
-      setIsRecording(false)
-
       socket.send(JSON.stringify({ terminate_session: true }))
       socket.close()
       socket = null
@@ -71,7 +70,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
     })
 
     console.log(recordedChunks)
-  }, [])
+  }, [isRecording])
 
   const onClickAskQuestion = React.useCallback(async () => {
     if (!videoPlayer.current) return
@@ -100,7 +99,7 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
         stopRecording()
       }
 
-      console.log('res: ' + JSON.stringify(res))
+      console.log('socket', res)
 
       texts[res.audio_start] = res.text
       const keys = Object.keys(texts)
@@ -121,12 +120,11 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
     socket.onerror = (event: any) => {
       console.error(event)
-      socket.close()
+      stopRecording()
     }
 
     socket.onclose = (event: any) => {
-      console.log(event)
-      socket = null
+      stopRecording()
     }
 
     socket.onopen = async () => {
@@ -160,12 +158,13 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
       recorder.startRecording()
     }
 
+    setIsRecording(true)
     setIsDialogOpen(true)
   }, [stopRecording])
 
   React.useEffect(() => {
     if (!isDialogOpen) {
-      // clean up dialog state
+      stopRecording()
     }
   }, [isDialogOpen])
 
@@ -243,23 +242,17 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
             >
               <div className='p-4 bg-white rounded-t-[10px] flex-1'>
                 <div className='mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8' />
-                <div className='max-w-md mx-auto'>
+
+                <div className='flex flex-col max-w-md mx-auto'>
                   <Drawer.Title className='font-medium mb-4'>
-                    Speak your question.
+                    Speak your question for Lex.
                   </Drawer.Title>
 
-                  <p className='text-zinc-600 mb-2'>
-                    This component can be used as a replacement for a Dialog on
-                    mobile and tablet devices.
-                  </p>
+                  <p className='text-zinc-600 mb-2'>{transcription || ''}</p>
 
-                  <button
-                    type='button'
-                    onClick={() => setIsDialogOpen(false)}
-                    className='rounded-md mb-6 w-full bg-gray-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600'
-                  >
-                    Click to close
-                  </button>
+                  <div className={styles.recordButton} onClick={stopRecording}>
+                    <Mic className={styles.micIcon} />
+                  </div>
                 </div>
               </div>
             </Drawer.Content>

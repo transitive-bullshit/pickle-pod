@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns'
 import defaultKy from 'ky'
 
-const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3/videos?'
+const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com'
 
 interface YoutubeMetadataResponse {
   kind: string
@@ -25,7 +25,7 @@ interface PageInfo {
 }
 
 interface YoutubeSnippet {
-  publishedAt: Date
+  publishedAt: string
   channelId: string
   title: string
   description: string
@@ -71,7 +71,7 @@ interface ContentRating {}
 
 const convertYouTubeDuration = function (duration = this) {
   const time_extractor = /([0-9]*H)?([0-9]*M)?([0-9]*S)?$/
-  const extracted = time_extractor.exec(duration)
+  const extracted = time_extractor.exec(duration)!
   const hours = parseInt(extracted[1], 10) || 0
   const minutes = parseInt(extracted[2], 10) || 0
   const seconds = parseInt(extracted[3], 10) || 0
@@ -109,7 +109,7 @@ export class YoutubeClient {
 
   async getMetadata(videoId: string) {
     const returnJson = await this.api
-      .get(``, {
+      .get('youtube/v3/videos', {
         searchParams: {
           id: videoId,
           key: process.env.GOOGLE_API_KEY!,
@@ -125,7 +125,7 @@ export class YoutubeClient {
         item.contentDetails.duration
       )
 
-      const date = parseISO(item.snippet.publishedAt) // parse the string into a Date object
+      const date = parseISO(item.snippet.publishedAt)
       item.snippet.publishedAt = format(date, 'MMMM dd, yyyy')
     })
 

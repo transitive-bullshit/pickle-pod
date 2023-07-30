@@ -70,6 +70,16 @@
   justify-content: space-around;
 }
 
-.record {
-  background: #d0433b;
+.recordButton {
+  align-self: center;
+  display: inline-flex;
+  padding: 12px;
+  background: #d0433b !important;
+  border-radius: 50%;
+}
+
+.micIcon {
+  color: #fff;
+  width: 36px;
+  height: 36px;
 }
