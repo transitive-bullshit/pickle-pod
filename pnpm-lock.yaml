@@ -26,9 +26,6 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
-  duration-iso-8601:
-    specifier: ^1.1.0
-    version: 1.1.0
   file-type:
     specifier: ^18.5.0
     version: 18.5.0
@@ -2838,10 +2835,6 @@ packages:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
     dev: true
-
-  /duration-iso-8601@1.1.0:
-    resolution: {integrity: sha512-2X43GSElCX4FEsM8LQyeBLlcbQowpL5igOh5pHepmkpcFTct/2s6CoFrFQFFuZDvqgbsGnAE4GI1Abf9s24Ktg==}
-    dev: false
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
