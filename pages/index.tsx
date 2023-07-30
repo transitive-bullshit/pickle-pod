@@ -84,7 +84,7 @@ const IndexPage = () => {
 
       <div className={styles.body}>
         <h2 className='text-2xl font-bold text-center mt-4'>
-          Welcome to Pickle Pod
+          Welcome to Pickle Pod 👋
         </h2>
 
         <p className='text-center mt-2 w-full'>

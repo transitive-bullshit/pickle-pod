@@ -346,12 +346,12 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 export async function getStaticPaths() {
   return {
     paths: [
-      { params: { videoId: 'cdiD-9MMpb0' } },
-      { params: { videoId: '34wA_bdG6QQ' } },
-      { params: { videoId: 'gk4tEO4jDUM' } },
-      { params: { videoId: 'DxREm3s1scA' } },
-      { params: { videoId: '4dC_nRYIDZU' } },
-      { params: { videoId: 'Ff4fRgnuFgQ' } }
+      '/listen/cdiD-9MMpb0',
+      '/listen/34wA_bdG6QQ',
+      '/listen/gk4tEO4jDUM',
+      '/listen/DxREm3s1scA',
+      '/listen/4dC_nRYIDZU',
+      '/listen/Ff4fRgnuFgQ'
     ],
     fallback: 'blocking'
   }
