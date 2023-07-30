@@ -1,13 +1,8 @@
 import * as React from 'react'
 import cs from 'clsx'
 import Image from 'next/image'
+import toast, { Toaster } from 'react-hot-toast'
 import YouTube, { YouTubeEvent } from 'react-youtube'
-import {
-  fetchAssemblyAIRealtimeToken,
-  generateDexaAnswerFromLex,
-  textToSpeech,
-  getYoutubeMetadata
-} from '@/lib/api'
 import type RecordRTCType from 'recordrtc'
 import { Drawer } from 'vaul'
 
@@ -17,6 +12,12 @@ import { Button } from '@/components/Button/Button'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
 import { HelpCircle, Mic, Pause, Play } from '@/icons'
+import {
+  fetchAssemblyAIRealtimeToken,
+  generateDexaAnswerFromLex,
+  getYoutubeMetadata,
+  textToSpeech
+} from '@/lib/api'
 
 import styles from './styles.module.css'
 
@@ -350,29 +351,35 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps = async (context) => {
-  // TODO: make this dynamic using `videoId`
   const youtubeId = context.params?.videoId as string
-  const metadata = await getYoutubeMetadata(youtubeId)
-  const snippet = metadata.snippet
-  const thumbnail = snippet.thumbnails.standard
+  try {
+    const metadata = await getYoutubeMetadata(youtubeId)
+    const snippet = metadata.snippet
+    const thumbnail = snippet.thumbnails.standard
 
-  const podcast: types.Podcast = {
-    youtubeId,
-    title: snippet.title,
-    description: snippet.description,
-    publishedAt: snippet.publishedAt,
-    channelId: snippet.channelId,
-    channelTitle: snippet.channelTitle,
-    youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
-    thumbnailUrl: thumbnail.url,
-    thumbnailWidth: thumbnail.width,
-    thumbnailheight: thumbnail.height,
-    duration: metadata.contentDetails.duration
-  }
+    const podcast: types.Podcast = {
+      youtubeId,
+      title: snippet.title,
+      description: snippet.description,
+      publishedAt: snippet.publishedAt,
+      channelId: snippet.channelId,
+      channelTitle: snippet.channelTitle,
+      youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
+      thumbnailUrl: thumbnail.url,
+      thumbnailWidth: thumbnail.width,
+      thumbnailheight: thumbnail.height,
+      duration: metadata.contentDetails.duration
+    }
 
-  return {
-    props: {
-      podcast
+    return {
+      props: {
+        podcast
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    return {
+      notFound: true
     }
   }
 }

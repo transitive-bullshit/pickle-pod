@@ -17,11 +17,17 @@ export default async function getYoutubeMetadata(
   try {
     const youtube = new YoutubeClient()
     const metadata = await youtube.getMetadata(videoId)
-    const data = {
-      snippet: metadata.items[0]['snippet'],
-      contentDetails: metadata.items[0]['contentDetails']
+
+    if (metadata.items && metadata.items.length > 0) {
+      const data = {
+        snippet: metadata.items[0]['snippet'],
+        contentDetails: metadata.items[0]['contentDetails']
+      }
+      res.json(data)
+    } else {
+      console.error('No items found in the metadata')
+      res.status(404).json({ error: 'No items found in the metadata' })
     }
-    res.json(data)
   } catch (err) {
     console.error('google youtube metadata error', err)
     res.status(500).json(err)

@@ -1,42 +1,64 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { getYoutubeMetadata } from '@/lib/api'
 
 const podcasters = [{ value: 'lex-fridman', label: 'Lex Fridman' }]
 
 const IndexPage = () => {
+  const router = useRouter()
+
   const [url, setUrl] = useState('')
   const [videoId, setVideoId] = useState('')
 
-  const handleStart = () => {
+  const handleStart = async () => {
     // Handle the start button click here
-    console.log('start')
+    if (isValidYoutubeUrl(url)) {
+      const videoId = getVideoId(url)
+      setVideoId(videoId)
+
+      try {
+        const metadata = await getYoutubeMetadata(videoId)
+
+        if (metadata == undefined) {
+          handleError('Please enter a valid Youtube URL. Metadata not found.')
+          return
+        }
+
+        if (
+          !metadata.snippet.channelTitle.toLowerCase().includes('lex') ||
+          !metadata.snippet.channelTitle.toLowerCase().includes('fridman')
+        ) {
+          handleError('Please make sure only lex fridman videos are used.')
+          return
+        }
+      } catch {
+        handleError('Please enter a valid Youtube URL. Metadata fetch errored.')
+        return
+      }
+
+      router.push(`/listen/${videoId}`)
+    } else {
+      toast.error('Please enter a valid Youtube URL. URL not valid.')
+      return
+    }
+  }
+
+  const handleError = (error: string) => {
+    setVideoId('')
+    setUrl('')
+    toast.error(error)
   }
 
   const handleURLOnChange = async (e) => {
     const enteredURL: string = e.target.value
     setUrl(enteredURL)
-
-    if (isValidYoutubeUrl(enteredURL)) {
-      const videoId = getVideoId(enteredURL)
-      setVideoId(videoId)
-
-      // import {
-      //   generateDexaAnswerFromLex,
-      //   getYoutubeMetadata,
-      //   textToSpeech
-      // } from '@/lib/api'
-      // const metadata = await getMetadata(videoId)
-      // const dexaAnswer = await generateDexaAnswerFromLex(
-      //   'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
-      // )
-      // const speech = await textToSpeech(dexaAnswer['answer'])
-      // console.log(speech)
-    }
   }
 
   const getVideoId = (url) => {
@@ -70,11 +92,10 @@ const IndexPage = () => {
         onChange={handleURLOnChange}
         placeholder='YouTube URL'
       />
-      <Link href={`/listen/${videoId}`}>
-        <Button className='mt-4' variant='outline' onClick={handleStart}>
-          Go
-        </Button>
-      </Link>
+      <Button className='mt-4' variant='outline' onClick={handleStart}>
+        Go
+      </Button>
+      <Toaster />
     </Layout>
   )
 }
