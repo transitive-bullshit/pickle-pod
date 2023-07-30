@@ -1,6 +1,7 @@
 import * as React from 'react'
 import cs from 'clsx'
 import Image from 'next/image'
+import SeekBar from 'react-seekbar-component'
 import YouTube, { YouTubeEvent } from 'react-youtube'
 import type RecordRTCType from 'recordrtc'
 import { Drawer } from 'vaul'
@@ -10,7 +11,7 @@ import { Button } from '@/components/Button/Button'
 // import * as config from '@/lib/config'
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
-import { ProgressBar } from '@/components/ProgressBar/ProgressBar'
+// import { ProgressBar } from '@/components/ProgressBar/ProgressBar'
 import { HelpCircle, Mic, Pause, Play } from '@/icons'
 import {
   fetchAssemblyAIRealtimeToken,
@@ -265,13 +266,24 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
                 <h1 className={cs(styles.title)}>{podcast.title}</h1>
               </div>
-              <ProgressBar
+              <SeekBar
+                className='[&>input]:w-full'
+                getNumber={onSeek}
+                backgroundColor='#D3D3D3'
+                fillColor='#7027D3'
+                fillSecondaryColor='blue'
+                headColor='white'
+                headShadow='white'
+                headShadowSize={6}
+                progress={progress}
+              />
+              {/* <ProgressBar
                 value={progress}
                 backgroundColor={'#D3D3D3'}
                 progressColor={'#7027D3'}
                 onSeek={onSeek}
                 buffering={playerStatus === 3}
-              />
+              /> */}
               <div className={styles.actions}>
                 <Button
                   className={styles.actionButton}
