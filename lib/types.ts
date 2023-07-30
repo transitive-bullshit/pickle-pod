@@ -13,5 +13,4 @@ export interface Podcast {
   duration: string
 
   publishedAt: string
-  publishedAtFormatted: string
 }

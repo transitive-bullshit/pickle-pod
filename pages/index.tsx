@@ -1,22 +1,16 @@
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 import { Layout } from '@/components/Layout/Layout'
 import { PageHead } from '@/components/PageHead/PageHead'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  generateDexaAnswerFromLex,
-  getYoutubeMetadata,
-  textToSpeech
-} from '@/lib/api'
 
 const podcasters = [{ value: 'lex-fridman', label: 'Lex Fridman' }]
 
 const IndexPage = () => {
-  const [selectedPodcaster, setSelectedPodcaster] = React.useState(
-    podcasters[0]
-  )
   const [url, setUrl] = useState('')
+  const [videoId, setVideoId] = useState('')
 
   const handleStart = () => {
     // Handle the start button click here
@@ -29,21 +23,20 @@ const IndexPage = () => {
 
     if (isValidYoutubeUrl(enteredURL)) {
       const videoId = getVideoId(enteredURL)
+      setVideoId(videoId)
 
-      console.log(videoId)
-      const metadata = await getMetadata(videoId)
-      const dexaAnswer = await generateDexaAnswerFromLex(
-        'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
-      )
-      const speech = await textToSpeech(dexaAnswer['answer'])
-      console.log(speech)
+      // import {
+      //   generateDexaAnswerFromLex,
+      //   getYoutubeMetadata,
+      //   textToSpeech
+      // } from '@/lib/api'
+      // const metadata = await getMetadata(videoId)
+      // const dexaAnswer = await generateDexaAnswerFromLex(
+      //   'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
+      // )
+      // const speech = await textToSpeech(dexaAnswer['answer'])
+      // console.log(speech)
     }
-  }
-
-  const getMetadata = async (videoId) => {
-    const data = await getYoutubeMetadata(videoId)
-    console.log(data)
-    return data // return the first item (should be the only item)
   }
 
   const getVideoId = (url) => {
@@ -77,9 +70,11 @@ const IndexPage = () => {
         onChange={handleURLOnChange}
         placeholder='YouTube URL'
       />
-      <Button variant='outline' onClick={handleStart}>
-        Start
-      </Button>
+      <Link href={`/listen/${videoId}`}>
+        <Button variant='outline' onClick={handleStart}>
+          Start
+        </Button>
+      </Link>
     </Layout>
   )
 }
