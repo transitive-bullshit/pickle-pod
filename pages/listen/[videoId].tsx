@@ -381,14 +381,12 @@ export default function ListenPage({ podcast }: { podcast: types.Podcast }) {
 
                       {answer && <p>{answer}</p>}
 
-                      <audio src={audioUrl} controls autoPlay />
-
-                      {/* <div
-                        className={styles.recordButton}
-                        onClick={finishRecording}
-                      >
-                        <Mic className={styles.micIcon} />
-                      </div> */}
+                      <audio
+                        className="w-full"
+                        src={audioUrl}
+                        controls
+                        autoPlay
+                      />
                     </>
                   )}
                 </div>
