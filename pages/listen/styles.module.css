@@ -20,11 +20,10 @@
   justify-content: center;
   align-items: center;
   gap: var(--gap);
-
 }
 
 .body div > input {
-  width: 100%
+  width: 100%;
 }
 
 .section {
@@ -65,12 +64,10 @@
   font-size: 1.2em;
 }
 
-
 .video {
   width: 0;
   height: 0;
 }
-
 
 .actionButton {
   display: inline-flex;
@@ -112,8 +109,37 @@
   background: #670c07;
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .micIcon {
   color: #fff;
   width: 36px;
   height: 36px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 1s infinite;
+}
+
+.micIconStatic {
+  color: #fff;
+  width: 36px;
+  height: 36px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

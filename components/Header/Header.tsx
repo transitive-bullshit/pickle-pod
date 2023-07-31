@@ -1,25 +1,25 @@
-import * as React from 'react'
-import cs from 'clsx'
-import Link from 'next/link'
+import * as React from "react";
+import cs from "clsx";
+import Link from "next/link";
 
-import * as config from '@/lib/config'
-import { ActiveLink } from '@/components/ActiveLink/ActiveLink'
-import { GitHub, Twitter } from '@/icons/index'
+import * as config from "@/lib/config";
+import { ActiveLink } from "@/components/ActiveLink/ActiveLink";
+import { GitHub, Twitter } from "@/icons/index";
 
-import { Logo } from './Logo'
-import styles from './styles.module.css'
+import { Logo } from "./Logo";
+import styles from "./styles.module.css";
 
 export const Header: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <header className={cs(styles.header, className)}>
       <div className={styles.navHeader}>
-        <Link href='/' className={styles.action} aria-label='Logo'>
+        <Link href="/" className={styles.action} aria-label="Logo">
           <Logo />
         </Link>
 
         <div className={styles.rhs}>
           <ActiveLink
-            href='/about'
+            href="/about"
             className={styles.action}
             activeClassName={styles.active}
           >
@@ -30,8 +30,8 @@ export const Header: React.FC<{ className?: string }> = ({ className }) => {
             className={cs(styles.twitter, styles.social)}
             href={config.twitterUrl1}
             title={`Twitter ${config.twitter1}`}
-            target='_blank'
-            rel='noopener noreferrer'
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <Twitter />
           </a>
@@ -39,14 +39,14 @@ export const Header: React.FC<{ className?: string }> = ({ className }) => {
           <a
             className={cs(styles.github, styles.social)}
             href={config.githubRepoUrl}
-            title='View source on GitHub'
-            target='_blank'
-            rel='noopener noreferrer'
+            title="View source on GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <GitHub />
           </a>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};

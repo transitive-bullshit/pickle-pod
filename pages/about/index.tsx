@@ -1,12 +1,12 @@
-import * as React from 'react'
-import { InferGetStaticPropsType } from 'next'
+import * as React from "react";
+import { InferGetStaticPropsType } from "next";
 
-import * as config from '@/lib/config'
-import { Layout } from '@/components/Layout/Layout'
-import { Markdown } from '@/components/Markdown/Markdown'
-import { markdownToHtml } from '@/server/markdown-to-html'
+import * as config from "@/lib/config";
+import { Layout } from "@/components/Layout/Layout";
+import { Markdown } from "@/components/Markdown/Markdown";
+import { markdownToHtml } from "@/server/markdown-to-html";
 
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 
 const markdownContent = `
 # About
@@ -27,10 +27,10 @@ Hello there! We appreciate your curiosity about our project. It was just last Fr
 
 ![Travis](https://pbs.twimg.com/profile_images/1347656662463766529/igIs8izN_400x400.png)
 - Travis: A feline aficionado, Travis has a keen eye for the transitive property of bullshit... When he's not playing with kittens or building AI appes, he's on a mission to make sense of the world's nonsense. Catch his hilarious insights on twitter [@transitive_bs](https://twitter.com/transitive_bs).
-`
+`;
 
 export default function AboutPage({
-  content
+  content,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout>
@@ -42,15 +42,15 @@ export default function AboutPage({
         <Markdown content={content} />
       </div>
     </Layout>
-  )
+  );
 }
 
 export const getStaticProps = async () => {
-  const content = await markdownToHtml(markdownContent)
+  const content = await markdownToHtml(markdownContent);
 
   return {
     props: {
-      content
-    }
-  }
-}
+      content,
+    },
+  };
+};

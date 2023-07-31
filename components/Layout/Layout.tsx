@@ -1,14 +1,14 @@
-import * as React from 'react'
-import cs from 'clsx'
-import { Inter } from 'next/font/google'
+import * as React from "react";
+import cs from "clsx";
+import { Inter } from "next/font/google";
 
-import { Footer } from '@/components/Footer/Footer'
-import { Header } from '@/components/Header/Header'
+import { Footer } from "@/components/Footer/Footer";
+import { Header } from "@/components/Header/Header";
 
-import { RootLayoutProviders } from './providers'
-import styles from './styles.module.css'
+import { RootLayoutProviders } from "./providers";
+import styles from "./styles.module.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,5 +21,5 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Footer className={styles.footer} />
       </RootLayoutProviders>
     </div>
-  )
+  );
 }

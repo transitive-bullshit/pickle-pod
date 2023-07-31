@@ -1,14 +1,14 @@
-import 'dotenv/config'
+import "dotenv/config";
 
-import { DexaClient } from '@/server'
+import { DexaClient } from "@/server";
 
 async function main() {
-  const dexa = new DexaClient()
+  const dexa = new DexaClient();
 
   const p =
-    'My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?'
-  const res = await dexa.generateDexaAnswerFromLex(p)
-  console.log(res)
+    "My disadvantage is I grew up in poverty. How can I convert my disadvantage into a superpower, Mr. Fridman?";
+  const res = await dexa.generateDexaAnswerFromLex(p);
+  console.log(res);
 }
 
-main()
+main();

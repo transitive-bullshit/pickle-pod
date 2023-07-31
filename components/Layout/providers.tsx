@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { MotionConfig } from 'framer-motion'
+import * as React from "react";
+import { MotionConfig } from "framer-motion";
 
 export function RootLayoutProviders({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <MotionConfig reducedMotion='user'>{children}</MotionConfig>
+  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }

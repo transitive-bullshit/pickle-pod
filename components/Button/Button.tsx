@@ -1,15 +1,15 @@
-import * as React from 'react'
-import cs from 'clsx'
+import * as React from "react";
+import cs from "clsx";
 
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 
 export const Button: React.FC<
   {
-    className?: string
-    buttonClassName?: string
-    children: React.ReactNode
-    isLoading?: boolean
-    ref?: any
+    className?: string;
+    buttonClassName?: string;
+    children: React.ReactNode;
+    isLoading?: boolean;
+    ref?: any;
   } & React.AnchorHTMLAttributes<HTMLAnchorElement>
 > = React.forwardRef(function Button(
   { className, buttonClassName, children, style, isLoading, ...buttonProps },
@@ -25,5 +25,5 @@ export const Button: React.FC<
         <div className={styles.buttonContent}>{children}</div>
       </a>
     </div>
-  )
-})
+  );
+});

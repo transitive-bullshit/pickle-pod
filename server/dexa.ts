@@ -1,42 +1,42 @@
-import defaultKy from 'ky'
+import defaultKy from "ky";
 
 export class DexaClient {
-  readonly api: typeof defaultKy
-  readonly apiBaseUrl: string
+  readonly api: typeof defaultKy;
+  readonly apiBaseUrl: string;
 
   constructor({
     // apiKey = process.env.DEXA_API_KEY,
     apiBaseUrl = process.env.DEXA_API_BASE_URL,
-    ky = defaultKy
+    ky = defaultKy,
   }: {
     // apiKey?: string
-    apiBaseUrl?: string
-    ky?: typeof defaultKy
+    apiBaseUrl?: string;
+    ky?: typeof defaultKy;
   } = {}) {
     if (!apiBaseUrl) {
       throw new Error(
         `Error Dexa missing required "apiBaseUrl" or "DEXA_API_BASE_URL"`
-      )
+      );
     }
 
-    this.apiBaseUrl = apiBaseUrl
+    this.apiBaseUrl = apiBaseUrl;
     this.api = ky.extend({
-      prefixUrl: apiBaseUrl
-    })
+      prefixUrl: apiBaseUrl,
+    });
   }
 
   async generateDexaAnswerFromLex(queryOrQuestion: string) {
-    const res = await this.api('api/lex', {
+    const res = await this.api("api/lex", {
       searchParams: {
-        q: queryOrQuestion
+        q: queryOrQuestion,
       },
       headers: {
-        Accept: 'text/event-stream'
+        Accept: "text/event-stream",
       },
-      timeout: 30000
-    })
+      timeout: 30000,
+    });
 
     // TODO: get streaming working
-    return res.text()
+    return res.text();
   }
 }

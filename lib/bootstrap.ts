@@ -1,6 +1,6 @@
-import { githubRepoUrl, isSafari, isServer } from './config'
+import { githubRepoUrl, isSafari, isServer } from "./config";
 
-const detail = `This webapp is open source: ${githubRepoUrl}`
+const detail = `This webapp is open source: ${githubRepoUrl}`;
 const banner = `
 
 ████████╗██████╗  █████╗ ███╗   ██╗███████╗██╗████████╗██╗██╗   ██╗███████╗    ██████╗ ███████╗
@@ -11,14 +11,14 @@ const banner = `
    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝    ╚═════╝ ╚══════╝
                                                                                                
    ${detail}
-`
+`;
 
 export async function bootstrap() {
-  if (isServer) return
+  if (isServer) return;
 
   if (isSafari) {
-    console.log(detail)
+    console.log(detail);
   } else {
-    console.log(banner)
+    console.log(banner);
   }
 }

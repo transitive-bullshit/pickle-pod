@@ -1,45 +1,45 @@
-import ky from 'ky'
+import ky from "ky";
 
-import * as config from './config'
+import * as config from "./config";
 
 export async function fetchAssemblyAIRealtimeToken() {
-  const url = `${config.apiBaseUrl}/api/token`
+  const url = `${config.apiBaseUrl}/api/token`;
 
-  const res = await ky(url).json<any>()
+  const res = await ky(url).json<any>();
 
-  return res.token as string
+  return res.token as string;
 }
 
 export async function getYoutubeMetadata(videoId: string) {
-  const url = `${config.apiBaseUrl}/api/youtube`
-
+  const url = `${config.apiBaseUrl}/api/youtube`;
+  console.log("bye");
   return ky(url, {
     searchParams: {
-      videoId
-    }
-  }).json<any>()
+      videoId,
+    },
+  }).json<any>();
 }
 
 export async function generateDexaAnswerFromLex(query: string) {
-  const url = `${config.apiBaseUrl}/api/dexa`
+  const url = `${config.apiBaseUrl}/api/dexa`;
 
   return ky(url, {
     searchParams: {
-      query
+      query,
     },
-    timeout: 30000
-  }).json<{ answer: string }>()
+    timeout: 30000,
+  }).json<{ answer: string }>();
 }
 
 export async function textToSpeech(text: string) {
-  const url = `${config.apiBaseUrl}/api/tts`
+  const url = `${config.apiBaseUrl}/api/tts`;
 
   return ky
     .post(url, {
       json: {
-        text: text
+        text: text,
       },
-      timeout: 60000
+      timeout: 60000,
     })
-    .json<{ audioUrl: string }>()
+    .json<{ audioUrl: string }>();
 }

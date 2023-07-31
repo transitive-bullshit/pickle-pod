@@ -1,10 +1,10 @@
-import 'dotenv/config'
-import fs from 'fs/promises'
+import "dotenv/config";
+import fs from "fs/promises";
 
-import { AssemblyAIClient } from '@/server'
+import { AssemblyAIClient } from "@/server";
 
 async function main() {
-  const assembly = new AssemblyAIClient()
+  const assembly = new AssemblyAIClient();
 
   // const input = await fs.readFile('audio/elevenlabs-lex-0.mp3')
   // const res = await assembly.uploadFile(input)
@@ -16,9 +16,9 @@ async function main() {
   // const transcription = await assembly.transcribeAudio({ audioUrl })
   // console.log(JSON.stringify(transcription, null, 2))
 
-  const transcriptionId = '6lu3feagru-4093-4174-b0f2-77b790798075'
-  const transcription = await assembly.getTranscriptionById(transcriptionId)
-  console.log(JSON.stringify(transcription, null, 2))
+  const transcriptionId = "6lu3feagru-4093-4174-b0f2-77b790798075";
+  const transcription = await assembly.getTranscriptionById(transcriptionId);
+  console.log(JSON.stringify(transcription, null, 2));
 }
 
-main()
+main();

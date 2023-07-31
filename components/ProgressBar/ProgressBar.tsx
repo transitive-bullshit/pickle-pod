@@ -1,31 +1,31 @@
-import * as React from 'react'
-import cs from 'clsx'
+import * as React from "react";
+import cs from "clsx";
 
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 
 export interface ProgressBarProps {
-  value: number
-  backgroundColor?: string
-  progressColor?: string
-  onSeek?: (value: number) => void
-  buffering?: boolean
+  value: number;
+  backgroundColor?: string;
+  progressColor?: string;
+  onSeek?: (value: number) => void;
+  buffering?: boolean;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
-  backgroundColor = 'lightgray',
-  progressColor = 'blue',
+  backgroundColor = "lightgray",
+  progressColor = "blue",
   onSeek,
-  buffering = false
+  buffering = false,
 }) => {
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!onSeek) return
-    const rect = (event.target as Element).getBoundingClientRect()
-    const x = event.clientX - rect.left // X position within the element.
-    const width = rect.right - rect.left // Element width.
-    const clickedValue = (x / width) * 100 // Relative (percentage) clicked position.
-    onSeek(clickedValue)
-  }
+    if (!onSeek) return;
+    const rect = (event.target as Element).getBoundingClientRect();
+    const x = event.clientX - rect.left; // X position within the element.
+    const width = rect.right - rect.left; // Element width.
+    const clickedValue = (x / width) * 100; // Relative (percentage) clicked position.
+    onSeek(clickedValue);
+  };
 
   return (
     <div
@@ -35,7 +35,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     >
       <div
         className={cs(styles.progressBar__fill, {
-          [styles.buffering]: buffering
+          [styles.buffering]: buffering,
         })}
         style={{ width: `${value}%`, backgroundColor: progressColor }}
       />
@@ -44,5 +44,5 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         style={{ left: `${value}%`, backgroundColor: progressColor }}
       />
     </div>
-  )
-}
+  );
+};
